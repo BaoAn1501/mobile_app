@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import UserStack from './src/scene/user/UserStack';
+import ChangePassword from './src/scene/user/screens/ChangePassword';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hello world</Text>
-      <StatusBar style="auto" />
-    </View>
+    <UserStack></UserStack>
+    // <ChangePassword/>
   );
 }
 
