@@ -6,8 +6,8 @@ import ChangePassword from './src/scene/user/screens/ChangePassword';
 
 export default function App() {
   return (
-    <UserStack></UserStack>
-    // <ChangePassword/>
+    // <UserStack></UserStack>
+    <ChangePassword/>
   );
 }
 
