@@ -1,11 +1,48 @@
+import React, {useEffect, useState, useContext} from 'react'
 import { StatusBar } from 'expo-status-bar';
 import {
     StyleSheet, Text, View, Image, TextInput, Pressable,
     KeyboardAvoidingView, ScrollView, ToastAndroid
-} from 'react-native'
+} from 'react-native';
+import { UserContext } from '../UserContext';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const SignIn = (props) => {
     const {navigation} = props;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [myIcon, setMyIcon] = useState('');
+    const [hidePass, setHidePass] = useState(true);
+    const {onLogin} = useContext(UserContext);
+    const { message } = useContext(UserContext);
+    const checkIcon = () => {
+        if(myIcon!=''){
+            if(myIcon=='eye'){
+                setHidePass(false);
+                setMyIcon('eye-slash');
+            } else {
+                setHidePass(true);
+                setMyIcon('eye');
+            }
+        }
+      }
+      useEffect(() => {
+        if(!password){
+          setMyIcon('');
+        } else {
+          hidePass==true ? setMyIcon('eye') : setMyIcon('eye-slash');
+        }
+      });
+      const onPressLogin = async () => {
+        if(!email || !password || email.trim().length==0 || password.trim().length==0){
+            ToastAndroid.show('Bạn chưa nhập đầy đủ thông tin', ToastAndroid.CENTER);
+            return;
+        }
+        const res = await onLogin(email, password);
+        if(message!=''){
+            ToastAndroid.show(message, ToastAndroid.BOTTOM);
+        }
+    }
     return (
         // <KeyboardAvoidingView>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
@@ -19,14 +56,27 @@ const SignIn = (props) => {
                 </View>
                 <View style={styles.TextInputContainer}>
                     <TextInput
-                        style={styles.textInput} placeholder='Email' />
-                    <TextInput
-                        style={styles.textInput} secureTextEntry placeholder='Mật khẩu' />
-                        <View>
-                            <Text style={styles.textForgotPass} onPress={()=>{navigation.navigate("Forgot")}}>Quên mật khẩu ?</Text>
-                        </View>
-                    <Pressable style={styles.buttonContainer}
-                    >
+                        style={styles.textInput}
+                        keyboardType='email-address'
+                        placeholder='Email' 
+                        onChangeText={setEmail}/>
+                    <View style={[styles.inputBox, styles.passwordBox]}>
+                        <TextInput
+                            style={styles.textInput} 
+                            secureTextEntry={hidePass}
+                            placeholder='Mật khẩu' 
+                            onChangeText={setPassword}/>
+                        <Icon
+                            style={styles.myIcon}
+                            name={myIcon}
+                            onPress={()=>checkIcon()}
+                            color='grey'
+                            size={14} />    
+                    </View>
+                    <View>
+                        <Text style={styles.textForgotPass} onPress={()=>{navigation.navigate("Forgot")}}>Quên mật khẩu ?</Text>
+                    </View>
+                    <Pressable style={styles.buttonContainer} onPress={()=>onPressLogin()}>
                         <Text style={styles.login}>Đăng nhập</Text>
                     </Pressable>
 
@@ -90,6 +140,7 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     textInput: {
+        width: '90%',
         height: 33,
         borderBottomColor: '#ABABAB',
         borderBottomWidth: 1.5,
@@ -130,6 +181,15 @@ const styles = StyleSheet.create({
     },
     textNew:{
         color:'#1BAC4B'
+    },
+    passwordBox: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+    },
+    myIcon: {
+        alignSelf: 'center',
+        position: 'absolute',
+        right: 10,
     },
 })
 

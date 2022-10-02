@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import UserStack from './src/scene/user/UserStack';
-import ChangePassword from './src/scene/user/screens/ChangePassword';
-
+import { UserContextProvider } from './src/scene/user/UserContext';
+import Navigation from './src/scene/navigation/Navigation';
 export default function App() {
   return (
-    // <UserStack></UserStack>
-    <ChangePassword/>
+    <UserContextProvider>
+      <Navigation/>
+    </UserContextProvider>
   );
 }
 
