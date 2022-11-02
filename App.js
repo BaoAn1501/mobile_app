@@ -1,17 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
+import 'react-native-gesture-handler';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import UserStack from './src/scene/user/UserStack';
-import ChangePassword from './src/scene/user/screens/ChangePassword';
-import { CustomerNavigation} from './src/scene/product/CustomerNavigation';
 import { UserContextProvider } from './src/scene/user/UserContext';
 import Navigation from './src/scene/navigation/Navigation';
+import { ProductContextProvider } from './src/scene/product/ProductContext';
 export default function App() {
   return (
-    <UserContextProvider>
+  <UserContextProvider>
+    <ProductContextProvider>
       <Navigation/>
-    </UserContextProvider>
-
+    </ProductContextProvider>
+  </UserContextProvider>
   );
 }
 

@@ -4,27 +4,20 @@ import {
     StyleSheet, Text, View, Image, TextInput, Pressable,
     KeyboardAvoidingView, ScrollView, ToastAndroid
 } from 'react-native';
-import { CheckBox, Dialog } from '@rneui/themed';
 import { UserContext } from '../UserContext';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-const keyPassAdmin='admin';
 const SignUp = (props) => {
     const {navigation} = props;
     const { onRegister } = useContext(UserContext);
-    const { message } = useContext(UserContext);
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [role, setRole] = useState('customer');
     const [hidePass1, setHidePass1] = useState(true);
     const [hidePass2, setHidePass2] = useState(true);
     const [myIcon1, setMyIcon1] = useState('');
     const [myIcon2, setMyIcon2] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
-    const [visibleDialog, setVisibleDialog] = useState(false);
-    const [code, setCode] = useState('');
     
     useEffect(() => {
         if(!password){
@@ -74,38 +67,14 @@ const SignUp = (props) => {
             ToastAndroid.show('Mật khẩu không trùng khớp', ToastAndroid.BOTTOM);
             return;
         }
-        const res = await onRegister(fullName, email, password, confirmPassword, phoneNumber, role);
-        ToastAndroid.show(message, ToastAndroid.BOTTOM);
-        if(res==true){
-            ToastAndroid.show(message, ToastAndroid.BOTTOM);
+        const res = await onRegister(fullName, email, password, confirmPassword, phoneNumber);
+        console.log('register result: ', res);
+        if(res.status==false){
+            ToastAndroid.show(res.message, ToastAndroid.BOTTOM); 
+        } else {
+            ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
             navigation.goBack();
         }
-    }
-    const handleCheckBox = () => {
-        if(isChecked==true) {
-            setIsChecked(false);
-            setRole('customer');
-        } else {
-            toggleDialog();
-        }
-    }
-    const toggleDialog = () => {
-        setVisibleDialog(!visibleDialog);
-    }
-    const handleOkButtonDialog = () => {
-        if(code == keyPassAdmin){
-            ToastAndroid.showWithGravity("Xác thực thành công", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
-            setIsChecked(true);
-            setRole('admin');
-            toggleDialog();
-        } else {
-            ToastAndroid.showWithGravity("Xác thực thất bại", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
-        }
-    }
-    const handleCancelButtonDialog = () => {
-        toggleDialog();
-        setCode('');
-        setIsChecked(false);
     }
     return (
         // <KeyboardAvoidingView>
@@ -155,11 +124,6 @@ const SignUp = (props) => {
                         style={styles.textInput} 
                         placeholder='Số điện thoại' 
                         onChangeText={setPhoneNumber}/>       
-                    <CheckBox
-                        title={'Đăng ký quản trị viên'}
-                        checked={isChecked}
-                        onPress={()=>handleCheckBox()}
-                    />
                     <Pressable style={styles.buttonContainer}
                         onPress = {()=>register()}
                     >
@@ -173,19 +137,6 @@ const SignUp = (props) => {
                             style={styles.textNew}> Đăng nhập</Text>
                     </View>
                 </View>
-                <Dialog
-                    
-                    isVisible={visibleDialog}
-                    onBackdropPress={()=>toggleDialog()}>
-                    <Dialog.Title title='Nhập mã xác minh quản lý viên'/>
-                    <TextInput 
-                        placeholder='Mã quản trị viên' 
-                        onChangeText={setCode}/>
-                    <Dialog.Actions>
-                        <Dialog.Button title={'Xác nhận'} onPress={()=>handleOkButtonDialog()}/>
-                        <Dialog.Button title={'Huỷ'} onPress={()=>handleCancelButtonDialog()}/>
-                    </Dialog.Actions>
-                </Dialog>
             </View>
             
         </ScrollView>

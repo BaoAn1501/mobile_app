@@ -14,7 +14,6 @@ const SignIn = (props) => {
     const [myIcon, setMyIcon] = useState('');
     const [hidePass, setHidePass] = useState(true);
     const {onLogin} = useContext(UserContext);
-    const { message } = useContext(UserContext);
     const checkIcon = () => {
         if(myIcon!=''){
             if(myIcon=='eye'){
@@ -39,8 +38,8 @@ const SignIn = (props) => {
             return;
         }
         const res = await onLogin(email, password);
-        if(message!=''){
-            ToastAndroid.show(message, ToastAndroid.BOTTOM);
+        if(res){
+            ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
         }
     }
     return (

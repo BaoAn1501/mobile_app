@@ -10,14 +10,13 @@ export const login = async (email, password) => {
     return response;
 }
 
-export const register = async (full_name, email, password, confirm_password, phone_number, role) => {
+export const register = async (full_name, email, password, confirm_password, phone_number) => {
     const data = {
         full_name: full_name,
         email : email,
         password: password,
         confirm_password: confirm_password,
         phone_number: phone_number,
-        role: role
     }
     const response = await axiosInstance.post(constants.API_REGISTER, data);
     return response;

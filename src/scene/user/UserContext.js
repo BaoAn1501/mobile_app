@@ -8,8 +8,6 @@ export const UserContext = createContext();
 export const UserContextProvider = (props) => {
     const {children} = props;
     const [isLogged, setIsLogged] = useState(false);
-    const [message, setMessage] = useState('');
-    const [role, setRole] = useState('');
 
     const onLogin = async (email, password) => {
         try {
@@ -17,28 +15,19 @@ export const UserContextProvider = (props) => {
             if(res.status==true && res.token){
                 await AsyncStorage.setItem(constants.TOKEN_KEY, res.token);
                 setIsLogged(true);
-                setRole(res.result.role);
-                console.log('role: ',res.result);
             }
-            setMessage(res.message);
-            return true;
+            return res;
         } catch(error) {
             console.log('onLogin error: ', error);
         }
         return false;
     }
 
-    const onRegister = async (full_name, email, password, confirm_password, phone_number, role) => {
+    const onRegister = async (full_name, email, password, confirm_password, phone_number) => {
         try {
-            const res = await register(full_name, email, password, confirm_password, phone_number, role);
-            if(res.status==true){
-                console.log(res.status);
-                return res.status;
-            } else {
-                console.log(res.status);
-                setMessage(res.message);
-                return false;
-            }
+            const res = await register(full_name, email, password, confirm_password, phone_number);
+            console.log('res context: ', res);
+            return res;
         } catch (error) {
             console.log('onRegister error: ', error);
         }
@@ -49,9 +38,7 @@ export const UserContextProvider = (props) => {
         <UserContext.Provider
             value={{
                 isLogged: isLogged,
-                onLogin, onRegister,
-                message: message,
-                role,
+                onLogin, onRegister
             }}
         >
             {children}
