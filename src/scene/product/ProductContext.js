@@ -17,7 +17,7 @@ export const ProductContextProvider = (props) => {
 
     const onGetProductsForHomePage = async () => {
         try {
-            const res = await getProductInCategory();
+            const res = await getProductsForHomePage();
             console.log('getProductsForHomePage context: ', res);
             return res;
         } catch (error) {
@@ -28,7 +28,7 @@ export const ProductContextProvider = (props) => {
 
     const onGetProductsInCategory = async (id) => {
         try {
-            const res = await getProductsForHomePage(id);
+            const res = await getProductInCategory(id);
             console.log('getProductsInCategory context: ', res);
             return res;
         } catch(error){

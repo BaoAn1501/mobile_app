@@ -1,5 +1,5 @@
 import axiosInstance from '../../utils/axios';
-import constants from '../../utils/constants';
+import {constants} from '../../utils/constants';
 
 export const getCategoriesForHomePage = async () => {
     const response = axiosInstance.get(constants.API_CATEGORIES);
@@ -14,7 +14,7 @@ export const getProductsForHomePage = async () => {
 }
 
 export const getProductInCategory = async (id) => {
-    const response = axiosInstance.get(`${constants.API_PRODUCTS}/${id}`);
+    const response = axiosInstance.get(`${constants.API_CATEGORIES}/${id}`);
     console.log('run products of category service mobile: ', response);
     return response;
 }

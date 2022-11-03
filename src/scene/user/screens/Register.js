@@ -13,7 +13,6 @@ const SignUp = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
     const [hidePass1, setHidePass1] = useState(true);
     const [hidePass2, setHidePass2] = useState(true);
     const [myIcon1, setMyIcon1] = useState('');
@@ -55,9 +54,9 @@ const SignUp = (props) => {
         }
     }
     const register = async () => {
-        if(!fullName || !email || !password || !confirmPassword || !phoneNumber
+        if(!fullName || !email || !password || !confirmPassword
             || fullName.trim().length==0 || email.trim().length==0 || password.trim().length==0
-            || confirmPassword.trim().length==0 || phoneNumber.trim().length==0){
+            || confirmPassword.trim().length==0){
             ToastAndroid.show('Bạn chưa nhập đầy đủ thông tin', ToastAndroid.BOTTOM);
             return;
         } else if(password.length<8){
@@ -67,7 +66,7 @@ const SignUp = (props) => {
             ToastAndroid.show('Mật khẩu không trùng khớp', ToastAndroid.BOTTOM);
             return;
         }
-        const res = await onRegister(fullName, email, password, confirmPassword, phoneNumber);
+        const res = await onRegister(fullName, email, password, confirmPassword);
         console.log('register result: ', res);
         if(res.status==false){
             ToastAndroid.show(res.message, ToastAndroid.BOTTOM); 
@@ -118,12 +117,7 @@ const SignUp = (props) => {
                             onPress={()=>checkIcon2()}
                             color='grey'
                             size={14} />
-                    </View>
-                    
-                    <TextInput
-                        style={styles.textInput} 
-                        placeholder='Số điện thoại' 
-                        onChangeText={setPhoneNumber}/>       
+                    </View>   
                     <Pressable style={styles.buttonContainer}
                         onPress = {()=>register()}
                     >

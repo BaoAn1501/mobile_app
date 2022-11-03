@@ -1,6 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import constants from "./constants";
+import {constants} from "./constants";
 
 const axiosInstance = axios.create({
     baseURL: constants.HOSTING

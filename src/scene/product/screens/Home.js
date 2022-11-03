@@ -1,12 +1,12 @@
-import { FlatList, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Pressable, StatusBar, ScrollView, TextInput } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Pressable, StatusBar, ScrollView, TextInput } from 'react-native'
 import React, { useContext, useState } from 'react'
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get("window")
 import { ProductContext } from "../ProductContext";
 import { useEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import { IP } from '../../../utils/constants';
 
 const HomeScreen = (prop) => {
     const { onGetCategoriesForHomePage, onGetProductsForHomePage } = useContext(ProductContext);
@@ -26,38 +26,17 @@ const HomeScreen = (prop) => {
         }
         getCategories();
         getProducts();
+        console.log(IP, 'IP');
     }, [])
 
-    const RenderItemCategory = (props) => {    
-        const { item } = props;
-        const getImage = () => {
-            return item.image ? item.image : 'https://i.quotev.com/2sdthghsaaaa.jpg';
-        }
-        return (
-            <TouchableOpacity style={styles.categoryItem} onPress={function(){
-                console.log('click show id: ', item.image);
-            }}>
-                
-                <Image style={styles.imageCategoryItem} resizeMode='cover' source={{uri: getImage()}}/>
-                <Text numberOfLines={1}>{item.name}</Text>
-            </TouchableOpacity>
-    
-        )
-    }
-    
-    const RenderItemProduct = (props) => {
-        const { item } = props
-        return (
-            <TouchableOpacity style={styles.productItem}>
-                <Image style={styles.productImageItem} source={{uri: item.image1}} />
-                <Text>{item.name}</Text>
-            </TouchableOpacity>
-        )
+    function convertIP (image) {
+        image = image.replace('localhost', IP);
+        return image;
     }
 
-    const insets = useSafeAreaInsets()
     return (
-        <ScrollView >
+        <SafeAreaView >
+            <ScrollView>
             <View style={styles.container}>
                 <View style={{ flex: 1 }}>
                     <StatusBar backgroundColor={"rgba(0,0,0,0)"} barStyle={"dark-content"} />
@@ -72,14 +51,23 @@ const HomeScreen = (prop) => {
                             editable={false}
                         />
                     </View>
+                    <View style={styles.besideCategories}>
                     
                     <View style={styles.categoriesContainer}>
-                        <FlatList
-                            data={categories} // data lấy từ context của categories
-                            numColumns={3}
-                            renderItem={({ item }) => <RenderItemCategory item={item} />}
-                            keyExtractor={item => item._id}
-                        />
+                        {
+                            categories.map(item => {
+                                return (
+                                    <TouchableOpacity style={styles.categoryItem} onPress={function(){
+                                        console.log('click show id: ', item.image);
+                                    }}>
+                                        
+                                        <Image style={styles.imageCategoryItem} resizeMode='cover' source={{uri: convertIP(item.image)}}/>
+                                        <Text numberOfLines={1}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )
+                            })
+                        }
+                    </View>
                     </View>
                     <View style={styles.questionContainer}>
                         <Text style={styles.questionText}>
@@ -88,16 +76,21 @@ const HomeScreen = (prop) => {
                         <Entypo name="chevron-right" size={24} color="black" />
                     </View>
                     <View style={styles.productsContainer}>
-                        <FlatList
-                            data={products}
-                            numColumns={2}
-                            renderItem={({ item }) => <RenderItemProduct item={item} />}
-                            keyExtractor={item => item._id}
-                        />
+                        {
+                            products.map(item => {
+                                return (
+                                    <TouchableOpacity style={styles.productItem}>
+                                        <Image style={styles.productImageItem} source={{uri: convertIP(item.image1)}} />
+                                        <Text>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )
+                            })
+                        }
                     </View>
                 </View>
             </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 
 }
@@ -131,7 +124,12 @@ const styles = StyleSheet.create({
     },
     categoriesContainer: {
         // paddingHorizontal: 10,
-        alignItems: 'center'
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
     categoryItem: {
         direction: 'flex',
@@ -140,14 +138,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 8,
         borderWidth: 1,
-        width: 80,
+        width: '27%',
         height: 80,
         alignItems: 'center',
+        justifyContent: 'center',
         margin: 10,
     },
     imageCategoryItem: {
-        width: 60,
-        height: 60
+        width: 40,
+        height: 40,
+        margin: 5
     },
     questionContainer: {
         backgroundColor: 'white',
@@ -164,7 +164,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     productsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
         alignItems: 'center',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     productItem: {
         direction: 'flex',
@@ -173,15 +178,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 8,
         borderWidth: 1,
-        width: '44%',
+        width: '40%',
         height: 'auto',
         alignItems: 'center',
         margin: 10,
         padding: 10
     },
     productImageItem: {
-        width: '80%',
-        height: 100,
+        width: '60%',
+        height: 80,
         backgroundColor:'red'
     }
     
