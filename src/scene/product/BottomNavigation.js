@@ -11,10 +11,11 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
-import HomeScreen from "./Home";
-import Chat from "./Chat";
-import Receipt from "./Receipt";
-import Profile from "./Profile";
+import HomeStack from "./HomeStack";
+import Chat from "./screens/Chat";
+import Receipt from "./screens/Receipt";
+import Profile from "./screens/Profile";
+import Home from "./screens/Home";
 
 const Tabs = createBottomTabNavigator();
 export const CustomerNavigation = () => {
@@ -46,7 +47,7 @@ export const CustomerNavigation = () => {
                 },
                 headerShown: false
             })}>
-                <Tabs.Screen name="Home" component={HomeScreen}></Tabs.Screen>
+                <Tabs.Screen name="Home" component={HomeStack}></Tabs.Screen>
                 <Tabs.Screen name="Receipt" component={Receipt}></Tabs.Screen>
                 <Tabs.Screen name="Chat" component={Chat}></Tabs.Screen>
                 <Tabs.Screen name="Profile" component={Profile}></Tabs.Screen>
