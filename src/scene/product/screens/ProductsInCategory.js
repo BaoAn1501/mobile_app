@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const ProductsInCategory = () => {
+const ProductsInCategory = (props) => {
+  const { navigation, route: { params: { id } } } = props;
   return (
     <View>
-      <Text>ProductsInCategory</Text>
+      <Text>{id}</Text>
     </View>
   )
 }

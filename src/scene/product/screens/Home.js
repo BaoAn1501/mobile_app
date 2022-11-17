@@ -27,17 +27,17 @@ const Home = (props) => {
   useEffect(() => {
     async function getCategories() {
       const res1 = await onGetCategoriesForHomePage();
-      console.log("getCategories in UI: ", res1);
+      
       setCategories(res1);
     }
     async function getProducts() {
       const res2 = await onGetProductsForHomePage();
-      console.log("getProducts in UI: ", res2);
+      
       setProducts(res2);
     }
     getCategories();
     getProducts();
-    console.log(IP, "IP");
+    
   }, []);
 
   function convertIP(image) {
@@ -47,9 +47,11 @@ const Home = (props) => {
   const renderProductItem = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("ProductDetail", { id: item._id })}
+        onPress={() => {
+          navigation.navigate("ProductDetail", { id: item._id });
+        }}
         style={styles.productItem}
-        key={Math.random()}
+        key={item._id}
       >
         <Image
           style={styles.productImage}

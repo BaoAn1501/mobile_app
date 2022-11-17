@@ -15,6 +15,7 @@ export const UserContextProvider = (props) => {
             if(res.status==true && res.token){
                 await AsyncStorage.setItem(constants.TOKEN_KEY, res.token);
                 setIsLogged(true);
+                console.log(res);
             }
             return res;
         } catch(error) {
