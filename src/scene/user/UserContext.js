@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React, { useState, createContext } from 'react';
-import {login, register, getUser} from './UserService';
+import {login, register, getUser, changeName} from './UserService';
 import {constants} from '../../utils/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const UserContext = createContext();
@@ -48,11 +48,25 @@ export const UserContextProvider = (props) => {
         return false;
     }
 
+    const onChangeName = async (id, full_name) => {
+        try {
+            const res = await changeName(id, full_name);
+            return res;
+        } catch (error) {
+            console.log('onRegister error: ', error);
+        }
+        return false;
+    }
+
     return (
         <UserContext.Provider
             value={{
                 isLogged: isLogged,
-                onLogin, onRegister, onGetUser, userID
+                onLogin, 
+                onRegister, 
+                onGetUser, 
+                userID,
+                onChangeName
             }}
         >
             {children}

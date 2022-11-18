@@ -22,6 +22,14 @@ export const register = async (full_name, email, password, confirm_password) => 
 }
 
 export const getUser = async (id) => {
-    const response = axiosInstance.get(`${constants.API_USERS}/${id}`);
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}`);
+    return response;
+}
+
+export const changeName = async (id, full_name) => {
+    const data = {
+        full_name: full_name
+    }
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/changeName`, data);
     return response;
 }
