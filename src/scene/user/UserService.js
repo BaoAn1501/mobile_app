@@ -20,3 +20,8 @@ export const register = async (full_name, email, password, confirm_password) => 
     const response = await axiosInstance.post(constants.API_REGISTER, data);
     return response;
 }
+
+export const getUser = async (id) => {
+    const response = axiosInstance.get(`${constants.API_USERS}/${id}`);
+    return response;
+}

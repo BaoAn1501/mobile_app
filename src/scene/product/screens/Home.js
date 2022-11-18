@@ -48,7 +48,7 @@ const Home = (props) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("ProductDetail", { id: item._id });
+          navigation.navigate("ProductDetail", { id: item._id, slug: item.size  });
         }}
         style={styles.productItem}
         key={item._id}
@@ -88,7 +88,7 @@ const Home = (props) => {
       <TouchableOpacity
         style={styles.categoryItem}
         onPress={() =>
-          navigation.navigate("ProductsInCategory", { id: item._id })
+          navigation.navigate("ProductsInCategory", { id: item._id})
         }
       >
         <Text style={{ paddingBottom: 5 }} numberOfLines={1}>

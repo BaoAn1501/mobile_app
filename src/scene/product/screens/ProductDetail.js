@@ -23,7 +23,7 @@ export const ProductDetail = (props) => {
   const {
     navigation,
     route: {
-      params: { id },
+      params: { id, slug },
     },
   } = props;
   console.log("id: ", id);
@@ -36,13 +36,18 @@ export const ProductDetail = (props) => {
 
   useEffect(() => {
     ( async function getProduct() {
+      const resP = await onGetProductSize(id, slug);
+      setProductSize(resP);
+    } )()
+    async function getProduct() {
       const resP = await onGetProduct(id);
       console.log("product one detail: ", resP[0]);
       setSizes(resP);
       setProduct(resP[0]);
       console.log('first product size: ', resP[0]);
       setImages([resP[0].image1, resP[0].image2, resP[0].image3]);
-    } )()
+    }
+    getProduct();
   }, []);
 
   async function getProductSize (id, slug) {
@@ -155,7 +160,7 @@ export const ProductDetail = (props) => {
             }}
           >
             {
-              first ? product.price : productSize.price
+              productSize.price
             }
           </Text>
           <Text style={{ marginStart: 24 }}> đồng</Text>

@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React, { useState, createContext } from 'react';
-import {login, register} from './UserService';
+import {login, register, getUser} from './UserService';
 import {constants} from '../../utils/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const UserContext = createContext();
@@ -8,6 +8,7 @@ export const UserContext = createContext();
 export const UserContextProvider = (props) => {
     const {children} = props;
     const [isLogged, setIsLogged] = useState(false);
+    const [userID, setUserID] = useState('');
 
     const onLogin = async (email, password) => {
         try {
@@ -15,6 +16,8 @@ export const UserContextProvider = (props) => {
             if(res.status==true && res.token){
                 await AsyncStorage.setItem(constants.TOKEN_KEY, res.token);
                 setIsLogged(true);
+                console.log('user info: ', res.result._id);
+                setUserID(res.result._id);
                 console.log(res);
             }
             return res;
@@ -35,11 +38,21 @@ export const UserContextProvider = (props) => {
         return false;
     }
 
+    const onGetUser = async (id) => {
+        try {
+            const res = await getUser(id);
+            return res;
+        } catch (error) {
+            console.log('onRegister error: ', error);
+        }
+        return false;
+    }
+
     return (
         <UserContext.Provider
             value={{
                 isLogged: isLogged,
-                onLogin, onRegister
+                onLogin, onRegister, onGetUser, userID
             }}
         >
             {children}
