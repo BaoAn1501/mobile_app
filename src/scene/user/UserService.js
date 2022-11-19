@@ -33,3 +33,8 @@ export const changeName = async (id, full_name) => {
     const response = await axiosInstance.post(`${constants.API_USERS}/${id}/changeName`, data);
     return response;
 }
+
+export const getAllAddress = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/address`);
+    return response;
+}
