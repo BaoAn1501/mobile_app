@@ -11,11 +11,13 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { IP } from "../../../utils/constants";
 import { ProductContext } from "../ProductContext";
+
 
 const Home = (props) => {
   const { navigation } = props;
@@ -108,15 +110,7 @@ const Home = (props) => {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.headerContainer}>
-            <View style={styles.titleContainer}>
-              <FontAwesome
-                style={styles.avatarImage}
-                name="user-circle"
-                size={32}
-                color="black"
-              />
-              <Text style={styles.usernameText}>Bình Thạnh</Text>
-            </View>
+            
             <View style={styles.searchContainer}>
               <FontAwesome5
                 onPress={() => navigation.navigate("SearchProduct")}
@@ -199,7 +193,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   searchContainer: {
-    marginTop: 10,
+    marginTop: 20,
     display: "flex",
     alignItems: "center",
     flexDirection: "row",

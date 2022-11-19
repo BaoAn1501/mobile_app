@@ -3,6 +3,7 @@ import React, { useState, createContext } from 'react';
 import {login, register, getUser, changeName} from './UserService';
 import {constants} from '../../utils/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export const UserContext = createContext();
 
 export const UserContextProvider = (props) => {

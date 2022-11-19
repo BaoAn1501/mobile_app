@@ -13,9 +13,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import HomeStack from "./HomeStack";
 import Chat from "./screens/Chat";
-import Receipt from "./screens/Receipt";
-import Profile from "./screens/Profile";
-import Home from "./screens/Home";
+import ProfileStack from './ProfileStack';
 
 const Tabs = createBottomTabNavigator();
 export const CustomerNavigation = () => {
@@ -26,8 +24,6 @@ export const CustomerNavigation = () => {
                     if(focused){
                         if(route.name == "Home"){
                             return <Entypo name="home" size={30} color="#52CC6D" />
-                        } else if(route.name == "Receipt"){
-                           return <FontAwesome5 name="shopping-cart" size={24} color="#52CC6D" />
                         } else if(route.name == "Chat"){
                             return <MaterialCommunityIcons name="message-text" size={30} color="#52CC6D" />
                         } else if(route.name == "Profile"){
@@ -36,8 +32,6 @@ export const CustomerNavigation = () => {
                     } else {
                         if(route.name == "Home"){
                             return <Entypo name="home" size={30} />
-                        } else if(route.name == "Receipt"){
-                            return <FontAwesome5 name="shopping-cart" size={24} />
                         } else if(route.name == "Chat"){
                             return <MaterialCommunityIcons name="message-text" size={30}  />
                         } else if(route.name == "Profile"){
@@ -48,9 +42,8 @@ export const CustomerNavigation = () => {
                 headerShown: false
             })}>
                 <Tabs.Screen name="Home" component={HomeStack}></Tabs.Screen>
-                <Tabs.Screen name="Receipt" component={Receipt}></Tabs.Screen>
                 <Tabs.Screen name="Chat" component={Chat}></Tabs.Screen>
-                <Tabs.Screen name="Profile" component={Profile}></Tabs.Screen>
+                <Tabs.Screen name="Profile" component={ProfileStack}></Tabs.Screen>
             </Tabs.Navigator>
 
     )
