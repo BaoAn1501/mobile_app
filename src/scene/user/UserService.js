@@ -38,3 +38,60 @@ export const getAllAddress = async (id) => {
     const response = await axiosInstance.get(`${constants.API_USERS}/${id}/address`);
     return response;
 }
+
+export const getOneAddress = async (id, ida) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/address/${ida}`);
+    return response;
+}
+
+
+export const addAddress = async (id, body) => {
+    const data = {
+        body
+    }
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/address/insert`, data);
+    return response;
+}
+
+export const deleteAddress = async (id, ida) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/address/${ida}/delete`);
+    return response;
+}
+
+export const updateAddress = async (id, ida, body) => {
+    const data = {
+        body
+    }
+    console.log('run update address in service');
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/address/${ida}/update`, data);
+    return response;
+}
+
+export const getMyCart = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/cart`);
+    return response;
+}
+
+export const plusCart = async (id, cid) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/cart/${cid}/update/plus`);
+    return response;
+}
+
+export const minusCart = async (id, cid) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/cart/${cid}/update/minus`);
+    return response;
+}
+
+export const deleteAllCart = async (id) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/cart/delete`);
+    return response;
+}
+
+export const deleteCart = async (id, cid) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/cart/${cid}/delete`);
+    return response;
+}
+
+
+
+

@@ -5,6 +5,9 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  ToastAndroid,
+  Modal,
+  Dimensions
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import React, { useContext, useState } from "react";
@@ -16,26 +19,64 @@ import { Button } from "react-native-web";
 import { ProductContext } from "../ProductContext";
 import { useEffect } from "react";
 import { IP } from "../../../utils/constants";
+import { UserContext } from "../../user/UserContext";
 const width = 180;
 const height = width;
+const windowWidth = Dimensions.get('window').width;
 
-export const ProductDetail = (props) => {
-  const {
-    navigation,
-    route: {
-      params: { id, slug },
-    },
-  } = props;
-  console.log("id: ", id);
-  const { onGetProduct, onGetProductSize } = useContext(ProductContext);
-  const [product, setProduct] = useState("");
-  const [sizes, setSizes] = useState([]);
+
+const ImageView = (props) => {
+
+  const {id} = props;
+  const { onGetProduct } = useContext(ProductContext);
   const [images, setImages] = useState([]);
+
+  useEffect(()=> {
+    ( async function getProduct() {
+      const resP = await onGetProduct(id);
+      setImages([resP[0].image1, resP[0].image2, resP[0].image3]);
+    } )()
+  }, [])
+
+  function convertIP(image) {
+    image = image.replace("localhost", IP);
+    return image;
+  }
+
+  return (
+    <View style={styles.imageContainer}>
+      <PagerView
+        style={{ width, height }}
+        initialPage={0}
+        orientation="horizontal"
+      >
+        {images.map((img) => (
+          <Image
+            key={Math.random()}
+            source={{
+              uri: img
+                ? convertIP(img)
+                : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg",
+            }}
+            style={{ width, height, resizeMode: "cover" }}
+          />
+        ))}
+      </PagerView>
+    </View>
+  );
+}
+
+const InfoView = (props) => {
+  const {id, slug} = props;
+  const {userID} = useContext(UserContext);
+  const { onGetProduct, onGetProductSize, onSaveCart } = useContext(ProductContext);
+  const [sizes, setSizes] = useState([]);
+  const [product, setProduct] = useState([]);
   const [productSize, setProductSize] = useState([]);
   const [first, setFirst] = useState(true);
 
   useEffect(() => {
-    ( async function getProduct() {
+    ( async function getProductSize() {
       const resP = await onGetProductSize(id, slug);
       setProductSize(resP);
     } )()
@@ -44,8 +85,6 @@ export const ProductDetail = (props) => {
       console.log("product one detail: ", resP[0]);
       setSizes(resP);
       setProduct(resP[0]);
-      console.log('first product size: ', resP[0]);
-      setImages([resP[0].image1, resP[0].image2, resP[0].image3]);
     }
     getProduct();
   }, []);
@@ -57,144 +96,181 @@ export const ProductDetail = (props) => {
     setFirst(false);
   }
 
-  function convertIP(image) {
-    image = image.replace("localhost", IP);
-    return image;
+  async function saveCart (id, slug, user_id) {
+    const res = await onSaveCart(id, slug, user_id);
+    if(res){
+      ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+    }
+
   }
+
+  return (
+    <View style={styles.body}>
+      <View>
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 20,
+            fontWeight: "700",
+            marginVertical: 10,
+          }}
+        >
+          {product.name}
+        </Text>
+      </View>
+      <View
+        style={{
+          alignItems: "flex-start",
+          marginVertical: 10,
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Rating
+          type="star"
+          ratingCount={5}
+          imageSize={40}
+          ratingColor="yellow"
+          readonly
+          startingValue={product.rating}
+        />
+        <Text style={{ fontSize: 18, color: "#9D9D9D", marginLeft: 6 }}>
+          (510)
+        </Text>
+      </View>
+      <View>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "600",
+            color: "black",
+            marginTop: 20,
+            marginLeft: 24,
+          }}
+        >
+          Giới thiệu
+        </Text>
+        <Text
+          style={{
+            fontSize: 13,
+            marginTop: 5,
+            marginLeft: 32,
+            color: "#7C7C7C",
+          }}
+        >
+          {product.description}
+        </Text>
+      </View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          marginTop: 12,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 32,
+            color: "#52CC6D",
+            marginLeft: 32,
+            fontWeight: "700",
+            textShadowColor: 'gray',
+            textShadowOffset: {width: -1, height: 1},
+            textShadowRadius: 5
+          }}
+        >
+          {
+            productSize.price
+          }
+        </Text>
+        <Text style={{ marginStart: 24 }}> đồng</Text>
+      </View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          marginVertical: 10,
+          marginStart: 15,
+        }}
+      >
+        {
+        sizes.map((item) => (
+          <TouchableOpacity
+            key={item._id}
+            onPress={()=>{ getProductSize(id, item.size_symbol)}}
+            style={
+              styles.sizeBox
+            }
+          >
+            <Text style={{ color: "green" }}>{item.size_symbol}</Text>
+          </TouchableOpacity>
+        ))
+        }
+      </View>
+      <View>
+        <TouchableOpacity
+          onPress={()=>{
+            saveCart(id, productSize.size_symbol, userID);
+          }}
+          style={styles.buttonContainer}
+          styles={{ opacity: 0.5 }}
+        >
+          <Text style={styles.add}>Thêm vào giỏ hàng</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+export const ProductDetail = (props) => {
+  const {
+    navigation,
+    route: {
+      params: { id, slug },
+    },
+  } = props;
+
+  const {userID, onGetCart} = useContext(UserContext);
+  const [carts, setCarts] = useState([]);
+  const [total, setTotal] = useState([]);
+
+  useEffect(() => {
+    (async function getMyCart() {
+      await onGetCart(userID).then((result) => {
+        setCarts(result);
+        const total = result.reduce(function (accumulator, currentValue) {
+          return (
+            accumulator +
+            currentValue.productSize_id.price * currentValue.quantity
+          );
+        }, 0);
+        setTotal(total);
+      });
+    })();
+  }, []);
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <PagerView
-            style={{ width, height }}
-            initialPage={0}
-            orientation="horizontal"
-          >
-            {images.map((img) => (
-              <Image
-                key={Math.random()}
-                source={{
-                  uri: img
-                    ? convertIP(img)
-                    : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg",
-                }}
-                style={{ width, height, resizeMode: "cover" }}
-              />
-            ))}
-          </PagerView>
-        </View>
-        <View>
-          <Text
-            style={{
-              textAlign: "center",
-              fontSize: 20,
-              fontWeight: "700",
-              marginVertical: 10,
-            }}
-          >
-            {product.name}
-          </Text>
-        </View>
-        <View
-          style={{
-            alignItems: "flex-start",
-            marginVertical: 10,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Rating
-            type="star"
-            ratingCount={5}
-            imageSize={40}
-            ratingColor="yellow"
-            readonly
-            startingValue={product.rating}
-          />
-          <Text style={{ fontSize: 18, color: "#9D9D9D", marginLeft: 6 }}>
-            (510)
-          </Text>
-        </View>
-        <View>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "600",
-              color: "black",
-              marginTop: 20,
-              marginLeft: 24,
-            }}
-          >
-            Giới thiệu
-          </Text>
-          <Text
-            style={{
-              fontSize: 13,
-              marginTop: 5,
-              marginLeft: 32,
-              color: "#7C7C7C",
-            }}
-          >
-            {product.description}
-          </Text>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 12,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 32,
-              color: "#52CC6D",
-              marginLeft: 32,
-              fontWeight: "700",
-              textShadowColor: 'gray',
-              textShadowOffset: {width: -1, height: 1},
-              textShadowRadius: 5
-            }}
-          >
-            {
-              productSize.price
-            }
-          </Text>
-          <Text style={{ marginStart: 24 }}> đồng</Text>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            marginVertical: 10,
-            marginStart: 15,
-          }}
-        >
-          {
-          sizes.map((item) => (
-            <TouchableOpacity
-              key={item._id}
-              onPress={()=>{ getProductSize(id, item.size_symbol)}}
-              style={
-                styles.sizeBox
-              }
-            >
-              <Text style={{ color: "green" }}>{item.size_symbol}</Text>
-            </TouchableOpacity>
-          ))
-          }
-        </View>
-        <View>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            styles={{ opacity: 0.5 }}
-          >
-            <Text style={styles.add}>Thêm vào giỏ hàng</Text>
-          </TouchableOpacity>
-        </View>
+        <ImageView id={id}/>
+        <InfoView id={id} slug={slug}/>
+        
+        {
+          carts.length > 0 ? 
+          <View style={{width: windowWidth, marginVertical: 12, backgroundColor: 'green' , flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center'}}>
+              <View style={{flexDirection: 'row'}}>
+                <Image style={{width: 24, height: 24, marginLeft: 24, marginRight: 12}} source={{uri: 'https://cdn-icons-png.flaticon.com/512/819/819781.png'}}/>
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>{carts.length}</Text>
+              </View>
+              <TouchableOpacity style={{marginRight: 24, borderRadius: 8, backgroundColor: 'white', flexDirection: 'row', padding: 5}} onPress={()=>navigation.navigate('Carts')}>
+                <Text style={{fontSize: 12, color: 'green', fontWeight: 'bold'}}>Thanh toán: </Text>
+                <Text style={{fontSize: 12, color: 'green', fontWeight: 'bold'}}>{total} đ</Text>
+              </TouchableOpacity>
+            </View>
+          : <></>
+        }
       </View>
     </ScrollView>
   );

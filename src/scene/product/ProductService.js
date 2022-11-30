@@ -27,4 +27,12 @@ export const getOneSizeProduct = async (id, slug) => {
     return response;
 }
 
+export const saveCart = async (id, slug, user_id) => {
+    const data = {
+        user_id: user_id
+    }
+    const response = axiosInstance.post(`${constants.API_PRODUCTS}/${id}/${slug}/save`, data);
+    return response;
+}
+
 

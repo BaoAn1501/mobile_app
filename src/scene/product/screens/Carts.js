@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -6,71 +6,134 @@ import {
   View,
   Image,
   Dimensions,
-  TouchableOpacity,
   Pressable,
-  StatusBar,
-  ScrollView,
-  TextInput,
   SafeAreaView,
+  ToastAndroid,
+  TouchableOpacity,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { CheckBox } from "@rneui/base";
-import { EvilIcons } from '@expo/vector-icons';
-const windowWidth = Dimensions.get('window').width;
+import { EvilIcons } from "@expo/vector-icons";
+import { MaterialIcons } from '@expo/vector-icons';
+const windowWidth = Dimensions.get("window").width;
+import { UserContext } from "../../user/UserContext";
+import { IP } from "../../../utils/constants";
 
 export const Carts = (props) => {
   const { navigation } = props;
-  
+  const { onGetCart, userID, onPlusCart, onMinusCart, onDeleteCart, onDeleteAllCart } =
+    useContext(UserContext);
+  const [carts, setCarts] = useState([]);
   const [checked, setChecked] = useState(false);
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     // Use `setOptions` to update the button that we previously specified
     // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
       headerRight: () => (
-        <EvilIcons name="trash" size={24} color="black" onPress={()=>{
-          console.log('bam vao thung rac');
-        }}/>
+        <TouchableOpacity 
+        style={{flexDirection: 'row', 
+        marginRight: 8}} 
+        onPress={()=>deleteAllItem(userID)}>
+          <EvilIcons
+          name="trash"
+          size={24}
+          color="black"
+        />
+        <Text>Xóa tất cả</Text>
+        </TouchableOpacity>
       ),
     });
   }, [navigation]);
+
+  useEffect(() => {
+    (async function getMyCart() {
+      await onGetCart(userID).then((result) => {
+        setCarts(result);
+        const total = result.reduce(function (accumulator, currentValue) {
+          return (
+            accumulator +
+            currentValue.productSize_id.price * currentValue.quantity
+          );
+        }, 0);
+        setTotal(total);
+      });
+    })();
+  }, [carts]);
+
+  async function plus(cid) {
+    await onPlusCart(userID, cid);
+  }
+
+  async function minus(cid) {
+    await onMinusCart(userID, cid);
+  }
+
+  function convertIP(image) {
+    image = image.replace("localhost", IP);
+    return image;
+  }
+
+  const onChecked = (id) => {
+    const data = carts;
+    const index = data.findIndex((x) => x._id == id);
+    data[index].checked = !data[index].checked;
+    setCarts(data);
+  };
+
+  async function deleteItem(id){
+    const res = await onDeleteCart(userID, id);
+    if(res){
+      if(res.message){
+        ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+      }
+    }
+  }
+
+  async function deleteAllItem(id){
+    const res = await onDeleteAllCart(userID);
+    if(res){
+      if(res.message){
+        ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+      }
+    }
+  }
+
   const cartItem = ({ item }) => {
+    
     return (
-      <View style={styles.itemContainer}>
+      <View key={item._id} style={styles.itemContainer}>
         <View style={styles.leftPart}>
-          <CheckBox
-            style={styles.checkBox}
-            checked={checked}
-            onPress={() => {
-              setChecked(!checked);
-            }}
-          />
           <Image
             style={styles.image}
             resizeMode="contain"
-            source={{ uri: item.productSize_id.image1 }}
+            source={{ uri: convertIP(item.productSize_id.product_id.image1) }}
           />
           <View style={styles.info}>
-            <Text style={styles.name}>{item.productSize_id.name}</Text>
-            <Text style={styles.size}>S</Text>
-            <Text style={styles.price}>$ {item.productSize_id.price}</Text>
+            <Text numberOfLines={1} style={styles.name}>
+              {item.productSize_id.product_id.name}
+            </Text>
+            <Text style={styles.size}>
+              {item.productSize_id.size_id.symbol}
+            </Text>
+            <Text style={styles.price}>{item.productSize_id.price} đ</Text>
           </View>
         </View>
         <View style={styles.rightPart}>
-          <View style={[styles.actionContainer, styles.actionLeft]}>
-            <Text onPress={() => {}} style={styles.actionText}>
-              -
-            </Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => minus(item._id)}
+            style={[styles.actionContainer, styles.actionLeft]}
+          >
+            <Text style={styles.actionText}>-</Text>
+          </TouchableOpacity>
           <View style={styles.quantityContainer}>
             <Text style={styles.quantity}>{item.quantity}</Text>
           </View>
-          <View style={[styles.actionContainer, styles.actionRight]}>
-            <Text onPress={() => {}} style={styles.actionText}>
-              +
-            </Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => plus(item._id)}
+            style={[styles.actionContainer, styles.actionRight]}
+          >
+            <Text style={styles.actionText}>+</Text>
+          </TouchableOpacity>
+          <MaterialIcons onPress={()=>deleteItem(item._id)} style={{marginLeft: 20}} name="highlight-remove" size={24} color="gray" />
         </View>
       </View>
     );
@@ -80,7 +143,8 @@ export const Carts = (props) => {
     return (
       <View style={styles.footer}>
         <View style={styles.leftFooter}>
-          <Text style={styles.total}>$24</Text>
+            <Text>Tổng tiền:</Text>
+            <Text style={styles.total}>{total} đ</Text>
         </View>
         <View style={styles.rightFooter}>
           <Pressable style={styles.button} onPress={() => {}}>
@@ -109,20 +173,17 @@ export const Carts = (props) => {
 
 export default Carts;
 const styles = StyleSheet.create({
-  container: {
-    
-  },
   itemContainer: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: "white",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 10,
     borderWidth: 0.5,
-    borderColor: 'white',
+    borderColor: "white",
     borderRadius: 3,
     marginHorizontal: 10,
-    marginTop: 16,
+    marginTop: 8,
     shadowColor: "black",
     shadowOffset: {
       width: 0,
@@ -132,34 +193,35 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
   },
   leftPart: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   rightPart: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   info: {
     height: 80,
     width: 100,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     paddingVertical: 5,
+    marginLeft: 10
   },
   image: {
     height: 80,
-    width: 80
+    width: 80,
   },
   name: {
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   actionContainer: {
     width: 32,
     height: 32,
-    borderColor: 'green',
+    borderColor: "green",
     borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   actionLeft: {
     borderTopStartRadius: 8,
@@ -170,121 +232,58 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 8,
   },
   actionText: {
-    color: 'green'
+    color: "green",
   },
   quantityContainer: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: 'green',
+    borderColor: "green",
     height: 32,
     width: 36,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   quantity: {
-    color: 'white',
-    fontWeight: 'bold'
+    color: "white",
+    fontWeight: "bold",
   },
   footer: {
-    flexDirection: 'row',
-    marginVertical: 20,
-    alignItems: 'center',
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 8,
     // width: windowWidth,
-    marginHorizontal: 30,
-    height: 40,
-    backgroundColor: 'green',
+    marginTop: 30,
+    height: 70,
+    backgroundColor: "white",
     borderRadius: 8,
+    justifyContent: 'space-between'
   },
   leftFooter: {
-    width: windowWidth*0.2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'red',
-    height: 40,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'green',
+    width: windowWidth * 0.3,
+    justifyContent: "center",
+    backgroundColor: "white",
+    height: 70,
+    marginLeft: 20,
   },
   rightFooter: {
-    justifyContent: 'center',
+    justifyContent: "center",
     height: 40,
-    alignItems: 'center',
-    width: windowWidth*0.64,
-    borderTopEndRadius: 8,
-    borderBottomEndRadius: 8,
+    alignItems: "center",
+    width: windowWidth * 0.5,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'green',
-    backgroundColor: 'green',
+    borderColor: "green",
+    backgroundColor: "green",
+    marginRight: 30,
   },
   total: {
-    color: 'white',
-    fontWeight: 'bold'
+    color: "red",
+    fontWeight: "bold",
   },
-  button: {
-
-  },
+  button: {},
   buttonText: {
-    color: 'white'
-  }
+    color: "white",
+  },
 });
-var carts = [
-  {
-    // cart
-    _id: "63760ecbb48c46de53df8510",
-    productSize_id: {
-      name: "Coffee ",
-      image1:
-        "https://xuconcept.com/wp-content/uploads/2020/12/anh-ly-ca-phe-dep-2.jpg",
-
-      _id: "635bb92416c74c1068deccd9",
-      size_id: "6356bff812392326d6c82c8f",
-      product_id: "635bb92416c74c1068deccd6",
-      price: 11,
-      deleted: false,
-      createdAt: "2022-10-28T11:12:36.610Z",
-      updatedAt: "2022-10-29T00:12:22.898Z",
-      __v: 0,
-    },
-    user_id: {
-      _id: "635b993222cdefc4bdb25e7b",
-      full_name: "bao an",
-      email: "an@gmail.com",
-      password: "$2a$10$Eu/RwCSy1uVQnysq/ZhUv.B9Bl1weZ9JJajtahrKFKj/FBvp2KIdW",
-      phone_number: "0934041111",
-      createdAt: "2022-10-28T08:56:18.190Z",
-      updatedAt: "2022-10-28T08:56:18.190Z",
-      __v: 0,
-    },
-    quantity: 3,
-  },
-  {
-    _id: "637627fd9b77f77efa5a509b",
-    productSize_id: {
-      name: "Coffee ",
-      _id: "635bcf378cf462b73ca1c1d5",
-
-      image1:
-        "https://xuconcept.com/wp-content/uploads/2020/12/anh-ly-ca-phe-dep-2.jpg",
-      size_id: "6356bffd12392326d6c82c93",
-      product_id: "635bcf378cf462b73ca1c1d1",
-      price: 15,
-      deleted: false,
-      createdAt: "2022-10-28T12:46:47.546Z",
-      updatedAt: "2022-11-10T05:19:27.233Z",
-      __v: 0,
-    },
-    user_id: {
-      _id: "635b993222cdefc4bdb25e7b",
-      full_name: "bao an",
-      email: "an@gmail.com",
-      password: "$2a$10$Eu/RwCSy1uVQnysq/ZhUv.B9Bl1weZ9JJajtahrKFKj/FBvp2KIdW",
-      phone_number: "0934041111",
-      createdAt: "2022-10-28T08:56:18.190Z",
-      updatedAt: "2022-10-28T08:56:18.190Z",
-      __v: 0,
-    },
-    quantity: 2,
-  },
-];

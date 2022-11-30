@@ -3,7 +3,8 @@ import { getCategoriesForHomePage,
     getProductsForHomePage, 
     getProductInCategory,
     getOneProduct,
-    getOneSizeProduct } from './ProductService';
+    getOneSizeProduct,
+    saveCart } from './ProductService';
 export const ProductContext = createContext();
 
 export const ProductContextProvider = (props) => {
@@ -59,6 +60,16 @@ export const ProductContextProvider = (props) => {
         return [];
     }
 
+    const onSaveCart = async (id, slug, user_id) => {
+        try {
+            const res = await saveCart(id, slug, user_id);
+            return res;
+        } catch(error) {
+            console.log('get product size error: ', error);
+        }
+        return false;
+    }
+
     return (
         <ProductContext.Provider
             value={{
@@ -66,7 +77,8 @@ export const ProductContextProvider = (props) => {
                 onGetProductsForHomePage,
                 onGetProductsInCategory, 
                 onGetProduct,
-                onGetProductSize
+                onGetProductSize,
+                onSaveCart,
             }}
         >
             {children}

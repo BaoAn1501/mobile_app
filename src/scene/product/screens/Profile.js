@@ -21,7 +21,7 @@ const Profile = (props) => {
       setUser(res1);
     };
     getUser();
-  });
+  }, [user]);
 
   return (
     <ScrollView>
