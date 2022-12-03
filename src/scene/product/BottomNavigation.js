@@ -6,13 +6,14 @@ import React from "react";
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import { AntDesign } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import HomeStack from "./HomeStack";
 import Chat from "./screens/Chat";
+import Ordering from "./screens/Ordering";
 import ProfileStack from './ProfileStack';
 
 const Tabs = createBottomTabNavigator();
@@ -28,6 +29,8 @@ export const CustomerNavigation = () => {
                             return <MaterialCommunityIcons name="message-text" size={30} color="#52CC6D" />
                         } else if(route.name == "Profile"){
                             return <FontAwesome5 name="user-alt" size={24} color="#52CC6D" />
+                        } else if(route.name == "Ordering"){
+                            return <Ionicons name="receipt" size={24} color="#52CC6D"/>
                         }
                     } else {
                         if(route.name == "Home"){
@@ -36,6 +39,8 @@ export const CustomerNavigation = () => {
                             return <MaterialCommunityIcons name="message-text" size={30}  />
                         } else if(route.name == "Profile"){
                             return <FontAwesome5 name="user-alt" size={24} />
+                        } else if(route.name == "Ordering"){
+                            return <Ionicons name="receipt" size={24}/>
                         }
                     }
                 },
@@ -43,9 +48,9 @@ export const CustomerNavigation = () => {
             })}>
                 <Tabs.Screen name="Home" component={HomeStack}></Tabs.Screen>
                 <Tabs.Screen name="Chat" component={Chat}></Tabs.Screen>
+                <Tabs.Screen name="Ordering" component={Ordering}></Tabs.Screen>
                 <Tabs.Screen name="Profile" component={ProfileStack}></Tabs.Screen>
             </Tabs.Navigator>
-
     )
 }
 

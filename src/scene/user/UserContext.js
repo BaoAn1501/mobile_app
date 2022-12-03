@@ -7,6 +7,7 @@ import {
   changeName,
   getAllAddress,
   getOneAddress,
+  getDefaultAddress,
   addAddress,
   deleteAddress,
   updateAddress,
@@ -15,6 +16,13 @@ import {
   minusCart,
   deleteCart,
   deleteAllCart,
+  checkOut,
+  getAllOrders,
+  getCancelOrders,
+  getPendingOrders,
+  getSuccessOrders,
+  getOneOrder,
+  cancelOrder,
 } from "./UserService";
 import { constants } from "../../utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -87,6 +95,16 @@ export const UserContextProvider = (props) => {
   const onGetOneAddress = async (id, ida) => {
     try {
       const res = await getOneAddress(id, ida);
+      return res;
+    } catch (error) {
+      console.log("onGetAllAddress error: ", error);
+    }
+    return false;
+  };
+
+  const onGetDefaultAddress = async (id) => {
+    try {
+      const res = await getDefaultAddress(id);
       return res;
     } catch (error) {
       console.log("onGetAllAddress error: ", error);
@@ -175,6 +193,76 @@ export const UserContextProvider = (props) => {
       return false;
   }
 
+  const onCheckOut = async (id, body) => {
+    try {
+        const res = await checkOut(id, body);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onGetAllOrders = async (id) => {
+    try {
+        const res = await getAllOrders(id);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onGetCancelOrders = async (id) => {
+    try {
+        const res = await getCancelOrders(id);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onGetPendingOrders = async (id) => {
+    try {
+        const res = await getPendingOrders(id);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onGetSuccessOrders = async (id) => {
+    try {
+        const res = await getSuccessOrders(id);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onGetOneOrder = async (id, ido) => {
+    try {
+        const res = await getOneOrder(id, ido);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onCancelOrder = async (id, ido) => {
+    try {
+        const res = await cancelOrder(id, ido);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -189,11 +277,19 @@ export const UserContextProvider = (props) => {
         onPlusCart,
         onMinusCart,
         onGetOneAddress,
+        onGetDefaultAddress,
         onAddAddress,
         onDeleteAddress,
         onUpdateAddress,
         onDeleteCart,
         onDeleteAllCart,
+        onCheckOut,
+        onGetAllOrders,
+        onGetCancelOrders,
+        onGetPendingOrders,
+        onGetSuccessOrders,
+        onGetOneOrder,
+        onCancelOrder,
       }}
     >
       {children}

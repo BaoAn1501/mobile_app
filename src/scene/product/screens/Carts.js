@@ -16,13 +16,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 const windowWidth = Dimensions.get("window").width;
 import { UserContext } from "../../user/UserContext";
 import { IP } from "../../../utils/constants";
+const windowHeight = Dimensions.get("window").height; 
 
 export const Carts = (props) => {
   const { navigation } = props;
   const { onGetCart, userID, onPlusCart, onMinusCart, onDeleteCart, onDeleteAllCart } =
     useContext(UserContext);
   const [carts, setCarts] = useState([]);
-  const [checked, setChecked] = useState(false);
   const [total, setTotal] = useState(0);
   useEffect(() => {
     // Use `setOptions` to update the button that we previously specified
@@ -57,7 +57,7 @@ export const Carts = (props) => {
         setTotal(total);
       });
     })();
-  }, [carts]);
+  }, []);
 
   async function plus(cid) {
     await onPlusCart(userID, cid);
@@ -71,13 +71,6 @@ export const Carts = (props) => {
     image = image.replace("localhost", IP);
     return image;
   }
-
-  const onChecked = (id) => {
-    const data = carts;
-    const index = data.findIndex((x) => x._id == id);
-    data[index].checked = !data[index].checked;
-    setCarts(data);
-  };
 
   async function deleteItem(id){
     const res = await onDeleteCart(userID, id);
@@ -147,7 +140,7 @@ export const Carts = (props) => {
             <Text style={styles.total}>{total} đ</Text>
         </View>
         <View style={styles.rightFooter}>
-          <Pressable style={styles.button} onPress={() => {}}>
+          <Pressable style={styles.button} onPress={() => {navigation.navigate('CheckOut'), console.log('to checkout')}}>
             <Text style={styles.buttonText}>Thanh toán</Text>
           </Pressable>
         </View>
@@ -159,12 +152,21 @@ export const Carts = (props) => {
     <SafeAreaView>
       <View style={styles.container}>
         {
+          carts.length > 0 ?
           <FlatList
             data={carts}
             renderItem={cartItem}
             keyExtractor={(item) => item._id}
             ListFooterComponent={renderFooter}
           />
+          : 
+          <View style={{height: windowHeight, alignItems: 'center', justifyContent: 'center'}}>
+            <Image style={{width: 80, height: 80, resizeMode: 'contain'}} source={{uri: 'https://cdn-icons-png.flaticon.com/512/1376/1376786.png'}} />
+            <Text>Chưa có sản phẩm nào trong giỏ hàng !</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+              <Text style={{color: 'green'}}>Đến mua hàng</Text>
+            </TouchableOpacity>
+          </View>
         }
       </View>
     </SafeAreaView>

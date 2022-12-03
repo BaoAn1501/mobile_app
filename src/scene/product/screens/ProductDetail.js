@@ -67,7 +67,7 @@ const ImageView = (props) => {
 }
 
 const InfoView = (props) => {
-  const {id, slug} = props;
+  const {id, slug, handleClick} = props;
   const {userID} = useContext(UserContext);
   const { onGetProduct, onGetProductSize, onSaveCart } = useContext(ProductContext);
   const [sizes, setSizes] = useState([]);
@@ -100,6 +100,7 @@ const InfoView = (props) => {
     const res = await onSaveCart(id, slug, user_id);
     if(res){
       ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+      handleClick();
     }
 
   }
@@ -232,45 +233,15 @@ export const ProductDetail = (props) => {
     },
   } = props;
 
-  const {userID, onGetCart} = useContext(UserContext);
-  const [carts, setCarts] = useState([]);
-  const [total, setTotal] = useState([]);
-
-  useEffect(() => {
-    (async function getMyCart() {
-      await onGetCart(userID).then((result) => {
-        setCarts(result);
-        const total = result.reduce(function (accumulator, currentValue) {
-          return (
-            accumulator +
-            currentValue.productSize_id.price * currentValue.quantity
-          );
-        }, 0);
-        setTotal(total);
-      });
-    })();
-  }, []);
+  const handleClick = () => {
+    navigation.navigate('Carts');
+  }
 
   return (
     <ScrollView>
       <View style={styles.container}>
         <ImageView id={id}/>
-        <InfoView id={id} slug={slug}/>
-        
-        {
-          carts.length > 0 ? 
-          <View style={{width: windowWidth, marginVertical: 12, backgroundColor: 'green' , flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'space-between', alignSelf: 'center'}}>
-              <View style={{flexDirection: 'row'}}>
-                <Image style={{width: 24, height: 24, marginLeft: 24, marginRight: 12}} source={{uri: 'https://cdn-icons-png.flaticon.com/512/819/819781.png'}}/>
-                <Text style={{fontSize: 20, fontWeight: 'bold'}}>{carts.length}</Text>
-              </View>
-              <TouchableOpacity style={{marginRight: 24, borderRadius: 8, backgroundColor: 'white', flexDirection: 'row', padding: 5}} onPress={()=>navigation.navigate('Carts')}>
-                <Text style={{fontSize: 12, color: 'green', fontWeight: 'bold'}}>Thanh toán: </Text>
-                <Text style={{fontSize: 12, color: 'green', fontWeight: 'bold'}}>{total} đ</Text>
-              </TouchableOpacity>
-            </View>
-          : <></>
-        }
+        <InfoView id={id} slug={slug} handleClick={handleClick}/>
       </View>
     </ScrollView>
   );

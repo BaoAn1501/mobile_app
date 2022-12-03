@@ -25,6 +25,7 @@
     "react-dom": "18.0.0",
     "react-native": "0.69.6",
     "react-native-dialog": "^9.3.0",
+    "react-native-dropdown-select-list": "^2.0.2",
     "react-native-gesture-handler": "^2.5.0",
     "react-native-pager-view": "^6.1.0",
     "react-native-phone-number-input": "^2.1.0",

@@ -20,8 +20,6 @@ const Cards = (props) => {
   const {navigation} = props;
 
   useEffect(() => {
-    // Use `setOptions` to update the button that we previously specified
-    // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
       headerRight: () => (
         <AntDesign
@@ -50,14 +48,6 @@ const Cards = (props) => {
         </View>
     );
   };
-
-
-
-
-
-
-
-
 
   return(
     <SafeAreaView>

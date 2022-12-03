@@ -10,6 +10,8 @@ import HistoryShopping from './screens/HistoryShopping';
 import MyAddresses from './screens/MyAddresses' 
 import Cards from './screens/Cards';
 import ChangePass from './screens/ChangePass';
+import CheckOut from './screens/CheckOut';
+import OrderDetail from './screens/OrderDetail';
 
 import { EvilIcons } from '@expo/vector-icons';
 
@@ -25,6 +27,8 @@ export default function ProfileStack() {
             <Stack.Screen name="History" component={HistoryShopping} options={{headerTitle: "Lịch sử mua hàng"}}></Stack.Screen>
             <Stack.Screen name="Address" component={MyAddresses} options={{headerTitle: "Địa chỉ của tôi"}}></Stack.Screen>
             <Stack.Screen name="Cards" component={Cards} options={{headerTitle: "Liên kết thẻ ngân hàng"}}></Stack.Screen>
+            <Stack.Screen name="CheckOut" component={CheckOut} options={{headerTitle: "Trang thanh toán"}}></Stack.Screen>
+            <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerTitle: "Trang thanh toán"}}></Stack.Screen>
     </Stack.Navigator>
   )
 }

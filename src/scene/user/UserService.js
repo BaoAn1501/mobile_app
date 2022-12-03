@@ -44,6 +44,10 @@ export const getOneAddress = async (id, ida) => {
     return response;
 }
 
+export const getDefaultAddress = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/address/get/default`);
+    return response;
+}
 
 export const addAddress = async (id, body) => {
     const data = {
@@ -62,7 +66,6 @@ export const updateAddress = async (id, ida, body) => {
     const data = {
         body
     }
-    console.log('run update address in service');
     const response = await axiosInstance.post(`${constants.API_USERS}/${id}/address/${ida}/update`, data);
     return response;
 }
@@ -92,6 +95,39 @@ export const deleteCart = async (id, cid) => {
     return response;
 }
 
+export const checkOut = async (id, data) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/cart/checkout`, data);
+    return response;
+}
 
+export const getAllOrders = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders`);
+    return response;
+}
+
+export const getCancelOrders = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders/cancel/get`);
+    return response;
+}
+
+export const getPendingOrders = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders/pending/get`);
+    return response;
+}
+
+export const getSuccessOrders = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders/success/get`);
+    return response;
+}
+
+export const cancelOrder = async (id, ido) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/orders/${ido}/cancel`);
+    return response;
+}
+
+export const getOneOrder = async (id, ido) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders/${ido}`);
+    return response;
+}
 
 

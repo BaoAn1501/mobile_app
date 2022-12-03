@@ -28,23 +28,6 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { UserContext } from "../../user/UserContext";
 import PhoneInput from "react-native-phone-number-input";
 
-// const HandleDialog = ({visible, id}) => {
-//   const { userID, onDeleteAddress } = useContext(UserContext);
-  
-//   return (
-//   <Dialog.Container style={styles.dialog} visible={visible}>
-//     <Dialog.Title>Xóa địa chỉ</Dialog.Title>
-//     <Dialog.Description>
-//       Bạn có muốn xóa địa chỉ này không ?
-//     </Dialog.Description>
-//     <Dialog.Button label="Quay lại" />
-//     <Dialog.Button label="Xóa" onPress={() => deleteAddress()}/>
-//   </Dialog.Container>
-//   )
-// }
-
-
-
 const RenderAddressItem = ({ item }) => {
   const { userID, onDeleteAddress } = useContext(UserContext);
   const refRBSheet = useRef();

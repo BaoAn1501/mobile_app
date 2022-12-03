@@ -28,7 +28,7 @@ const ProductsInCategory = (props) => {
   const renderProductItem = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("ProductDetail", { id: item._id })}
+        onPress={() => navigation.navigate("ProductDetail", { id: item._id, slug: item.size })}
 
         style={styles.productsInCategoryItem}
         key={Math.random()}
