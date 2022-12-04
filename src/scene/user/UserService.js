@@ -130,4 +130,18 @@ export const getOneOrder = async (id, ido) => {
     return response;
 }
 
+export const rate = async (id, idr, body) => {
+    const data = { body };
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/reviews/yet/${idr}/rate`, data);
+    return response;
+}
 
+export const getReviewsYet = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/reviews/yet`);
+    return response;
+}
+
+export const getReviewsAlready = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/reviews/already`);
+    return response;
+}

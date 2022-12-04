@@ -157,14 +157,8 @@ const Profile = (props) => {
 
           <View style={styles.row}>
             <View style={styles.left_part}>
-              <FontAwesome5
-                style={styles.icon}
-                resizeMode="cover"
-                name="credit-card"
-                size={13}
-                color="#828282"
-              />
-              <Text style={styles.text}>Thẻ</Text>
+            <AntDesign name="star" size={15} color="gray"  />
+              <Text style={styles.text}>Đánh Giá</Text>
             </View>
             <MaterialIcons
               style={styles.right_icon}
@@ -173,7 +167,7 @@ const Profile = (props) => {
               size={18}
               color="#828282"
               onPress={() => {
-                navigation.navigate("Cards");
+                navigation.navigate("ReviewPage");
               }}
             />
           </View>

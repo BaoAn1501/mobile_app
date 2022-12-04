@@ -142,7 +142,7 @@ const HistoryShopping = (props) => {
             <Text style={{marginLeft: 10}}>({item.payment_id == 1 ? 'Tiền mặt' : 'Ví điện tử'})</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={()=>navigation.navigate('OrderDetail')}>
+        <TouchableOpacity onPress={()=>navigation.navigate("OrderDetail", { id: item._id})}>
           <Text style={{color: 'green'}}>Chi tiết</Text>
         </TouchableOpacity>
       </View>

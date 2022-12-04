@@ -12,6 +12,10 @@ import Cards from './screens/Cards';
 import ChangePass from './screens/ChangePass';
 import CheckOut from './screens/CheckOut';
 import OrderDetail from './screens/OrderDetail';
+import ReviewPage from './screens/ReviewPage';
+import ReviewProduct from './screens/ReviewProduct';
+import { YetRoute } from './screens/ReviewPage';
+import { AlreadyRoute } from './screens/ReviewPage';
 
 import { EvilIcons } from '@expo/vector-icons';
 
@@ -29,6 +33,11 @@ export default function ProfileStack() {
             <Stack.Screen name="Cards" component={Cards} options={{headerTitle: "Liên kết thẻ ngân hàng"}}></Stack.Screen>
             <Stack.Screen name="CheckOut" component={CheckOut} options={{headerTitle: "Trang thanh toán"}}></Stack.Screen>
             <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerTitle: "Trang thanh toán"}}></Stack.Screen>
+            <Stack.Screen name="ReviewPage" component={ReviewPage} options={{headerTitle: "Đánh giá sản phẩm"}}></Stack.Screen>
+            <Stack.Screen name="ReviewProduct" component={ReviewProduct} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
+            <Stack.Screen name="YetRoute" component={YetRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
+            <Stack.Screen name="AlreadyRoute" component={AlreadyRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
+
     </Stack.Navigator>
   )
 }

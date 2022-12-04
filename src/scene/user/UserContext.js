@@ -23,6 +23,9 @@ import {
   getSuccessOrders,
   getOneOrder,
   cancelOrder,
+  rate,
+  getReviewsYet,
+  getReviewsAlready,
 } from "./UserService";
 import { constants } from "../../utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -263,6 +266,36 @@ export const UserContextProvider = (props) => {
       return false;
   }
 
+  const onRate = async (id, ido, body) => {
+    try {
+        const res = await rate(id, ido, body);
+        return res;
+      } catch (error) {
+        console.log("rate error: ", error);
+      }
+      return false;
+  }
+
+  const onGetReviewsYet = async (id) => {
+    try {
+        const res = await getReviewsYet(id);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onGetReviewsAlready = async (id) => {
+    try {
+        const res = await getReviewsAlready(id);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -290,6 +323,9 @@ export const UserContextProvider = (props) => {
         onGetSuccessOrders,
         onGetOneOrder,
         onCancelOrder,
+        onRate,
+        onGetReviewsYet,
+        onGetReviewsAlready
       }}
     >
       {children}
