@@ -14,7 +14,6 @@ import {
 
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 import { IP } from "../../../utils/constants";
 import { ProductContext } from "../ProductContext";
 
@@ -32,12 +31,16 @@ const Home = (props) => {
       
       setCategories(res1);
     }
+    getCategories();
+    
+  }, []);
+
+  useEffect(() => {
     async function getProducts() {
       const res2 = await onGetProductsForHomePage();
       
       setProducts(res2);
     }
-    getCategories();
     getProducts();
     
   }, []);
@@ -56,9 +59,13 @@ const Home = (props) => {
         key={item._id}
       >
         <Image
+          resizeMode="contain" 
+          style={[styles.imgOutOfStock, {display: item.status.code!=2 ? 'none' : 'flex'}]} 
+          source={{uri : 'https://vn-test-11.slatic.net/p/7d0e46288cad767c319ea4aa8e6f8b75.png'}} />
+        <Image
           style={styles.productImage}
           resizeMode="cover"
-          source={{ uri: convertIP(item.image1) }}
+          source={{ uri: convertIP(item.image1)}}
         />
         <View style={styles.productInfoContainer}>
           <View style={styles.productNameContainer}>
@@ -111,9 +118,8 @@ const Home = (props) => {
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             
-            <View style={styles.searchContainer}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SearchProduct')} style={styles.searchContainer}>
               <FontAwesome5
-                onPress={() => navigation.navigate("SearchProduct")}
                 style={styles.searchIcon}
                 name="search"
                 size={18}
@@ -123,7 +129,7 @@ const Home = (props) => {
                 placeholder="Tìm món"
                 editable={false}
               />
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.categoriesContainer}>
             {
@@ -250,6 +256,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   productItem: {
+    position: 'relative',
     direction: "flex",
     flexDirection: "column",
     borderColor: "white",
@@ -262,6 +269,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 8,
     margin: 8,
+  },
+  imgOutOfStock: {
+    height: 70,
+    width: 70,
+    left: 0,
+    top: 0,
+    position: 'absolute'
   },
   productInfoContainer: {
     width: "100%",

@@ -29,10 +29,13 @@ const ProductsInCategory = (props) => {
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate("ProductDetail", { id: item._id, slug: item.size })}
-
         style={styles.productsInCategoryItem}
         key={Math.random()}
       >
+        <Image
+          resizeMode="contain" 
+          style={[styles.imgOutOfStock, {display: item.status.code!=2 ? 'none' : 'flex'}]} 
+          source={{uri : 'https://vn-test-11.slatic.net/p/7d0e46288cad767c319ea4aa8e6f8b75.png'}} />
         <Image
           style={styles.productsInCategoryImage}
           resizeMode="cover"
@@ -137,6 +140,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   productsInCategoryItem: {
+    position: 'relative',
     direction: "flex",
     flexDirection: "column",
     borderColor: "white",
@@ -214,6 +218,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "#000000",
     borderWidth: 1,
+  },
+
+  imgOutOfStock: {
+    height: 70,
+    width: 70,
+    left: 0,
+    top: 0,
+    position: 'absolute'
   },
 
   category: {

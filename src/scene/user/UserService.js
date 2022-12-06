@@ -145,3 +145,23 @@ export const getReviewsAlready = async (id) => {
     const response = await axiosInstance.get(`${constants.API_USERS}/${id}/reviews/already`);
     return response;
 }
+
+export const search = async (id, text) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/search?text=${text}`);
+    return response;
+}
+
+export const createSearch = async (id, text) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/search/list/create?text=${text}`);
+    return response;
+}
+
+export const deleteSearch = async (id, _id) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/search/list/${_id}/delete`);
+    return response;
+}
+
+export const showSearch = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/search/list`);
+    return response;
+}

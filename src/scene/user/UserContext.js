@@ -26,6 +26,10 @@ import {
   rate,
   getReviewsYet,
   getReviewsAlready,
+  search,
+  createSearch,
+  deleteSearch,
+  showSearch,
 } from "./UserService";
 import { constants } from "../../utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -291,7 +295,47 @@ export const UserContextProvider = (props) => {
         const res = await getReviewsAlready(id);
         return res;
       } catch (error) {
-        console.log("onGetCart error: ", error);
+        console.log(error);
+      }
+      return false;
+  }
+
+  const onSearch = async (id, text) => {
+    try {
+        const res = await search(id, text);
+        return res;
+      } catch (error) {
+        console.log(error);
+      }
+      return false;
+  }
+
+  const onCreateSearch = async (id, text) => {
+    try {
+        const res = await createSearch(id, text);
+        return res;
+      } catch (error) {
+        console.log(error);
+      }
+      return false;
+  }
+
+  const onDeleteSearch = async (id, _id) => {
+    try {
+        const res = await deleteSearch(id, _id);
+        return res;
+      } catch (error) {
+        console.log(error);
+      }
+      return false;
+  }
+
+  const onShowSearch = async (id) => {
+    try {
+        const res = await showSearch(id);
+        return res;
+      } catch (error) {
+        console.log(error);
       }
       return false;
   }
@@ -325,7 +369,11 @@ export const UserContextProvider = (props) => {
         onCancelOrder,
         onRate,
         onGetReviewsYet,
-        onGetReviewsAlready
+        onGetReviewsAlready,
+        onSearch,
+        onCreateSearch,
+        onDeleteSearch,
+        onShowSearch
       }}
     >
       {children}

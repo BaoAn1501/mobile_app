@@ -19,8 +19,8 @@ export default function HomeStack() {
     <Stack.Navigator>
             <Stack.Screen name="Home" component={Home} options={{headerShown: false}}></Stack.Screen>
             <Stack.Screen name="SearchProduct" component={SearchProduct} options={{headerTitle: ""}}></Stack.Screen>
-            <Stack.Screen name="ProductDetail" component={ProductDetail} options={{headerTitle: ""}}></Stack.Screen>
-            <Stack.Screen name="AllProducts" component={AllProducts} options={{headerTitle: ""}}></Stack.Screen>
+            <Stack.Screen name="ProductDetail" component={ProductDetail} options={{headerTitle: "Chi tiết sản phẩm"}}></Stack.Screen>
+            <Stack.Screen name="AllProducts" component={AllProducts} options={{headerTitle: "Tất cả sản phẩm"}}></Stack.Screen>
             <Stack.Screen name="Carts" component={Carts} options={{headerTitle: "Giỏ hàng"}}></Stack.Screen>
             <Stack.Screen name="CheckOut" component={CheckOut} options={{headerTitle: "Trang thanh toán"}}></Stack.Screen>
             <Stack.Screen name="ProductsInCategory" component={ProductsInCategory} options={{headerTitle: ""}}></Stack.Screen>
