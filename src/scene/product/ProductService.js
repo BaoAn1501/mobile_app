@@ -35,5 +35,9 @@ export const saveCart = async (id, slug, user_id) => {
     return response;
 }
 
+export const reviews = async (id) => {
+    const response = axiosInstance.get(`${constants.API_PRODUCTS}/${id}/reviews/all`);
+    return response;
+}
 
 

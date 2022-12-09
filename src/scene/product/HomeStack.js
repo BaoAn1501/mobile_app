@@ -13,7 +13,7 @@ import OrderDetail from './screens/OrderDetail';
 import ReviewProduct from './screens/ReviewProduct';
 import { YetRoute } from './screens/ReviewPage';
 import { AlreadyRoute } from './screens/ReviewPage';
-
+import ReviewProductList from './screens/ReviewProductList';
 export default function HomeStack() {
   return (
     <Stack.Navigator>
@@ -28,6 +28,7 @@ export default function HomeStack() {
             <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerTitle: "Hóa đơn chi tiết"}}></Stack.Screen>
             <Stack.Screen name="YetRoute" component={YetRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
             <Stack.Screen name="AlreadyRoute" component={AlreadyRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
+            <Stack.Screen name="ReviewDetail" component={ReviewProductList} options={{headerTitle: "Đánh giá sản phẩm"}}></Stack.Screen>
     </Stack.Navigator>
   )
 }

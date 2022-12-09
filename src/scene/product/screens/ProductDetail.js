@@ -20,6 +20,8 @@ import { ProductContext } from "../ProductContext";
 import { useEffect } from "react";
 import { IP } from "../../../utils/constants";
 import { UserContext } from "../../user/UserContext";
+import { MaterialIcons } from "@expo/vector-icons";
+
 const width = 180;
 const height = width;
 const windowWidth = Dimensions.get('window').width;
@@ -67,13 +69,15 @@ const ImageView = (props) => {
 }
 
 const InfoView = (props) => {
-  const {id, slug, handleClick} = props;
+  const {id, slug, handleClick, navigation} = props;
   const {userID} = useContext(UserContext);
+  const {onReviewAll} = useContext(ProductContext);
   const { onGetProduct, onGetProductSize, onSaveCart } = useContext(ProductContext);
   const [sizes, setSizes] = useState([]);
   const [product, setProduct] = useState([]);
   const [productSize, setProductSize] = useState([]);
   const [first, setFirst] = useState(true);
+  const [review, setReview] = useState({});
 
   useEffect(() => {
     ( async function getProductSize() {
@@ -86,7 +90,28 @@ const InfoView = (props) => {
       setSizes(resP);
       setProduct(resP[0]);
     }
+    async function getReviews(){
+      await onReviewAll(id).then(result => {
+        if(result.length > 0){
+          let total = result.reduce((acc, item) => {
+            return acc + item.score;
+          }, 0);
+          let count = result.length;
+          let average = total / count;
+          setReview({
+            score: average,
+            count: count
+          })
+        } else {
+          setReview({
+            score: 0,
+            count: 0
+          })
+        }
+      })
+    }
     getProduct();
+    getReviews();
   }, []);
 
   async function getProductSize (id, slug) {
@@ -121,24 +146,31 @@ const InfoView = (props) => {
       </View>
       <View
         style={{
-          alignItems: "flex-start",
           marginVertical: 10,
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
+          display: 'flex',
         }}
       >
-        <Rating
-          type="star"
-          ratingCount={5}
-          imageSize={40}
-          ratingColor="yellow"
-          readonly
-          startingValue={product.rating}
-        />
-        <Text style={{ fontSize: 18, color: "#9D9D9D", marginLeft: 6 }}>
-          (510)
-        </Text>
+        <View style={{alignItems: 'center'}}>
+          <Rating
+            type="star"
+            style={{justifyContent: 'center'}}
+            ratingCount={5}
+            imageSize={40}
+            ratingColor="yellow"
+            readonly
+            startingValue={review.score}
+          />
+          <Text style={{ fontSize: 18, color: "#9D9D9D", marginLeft: 6 }}>
+            {review.count} reviews
+          </Text>
+          <TouchableOpacity onPress={()=> navigation.navigate('ReviewDetail', {id: id})}>
+            <Text style={{color: 'green', fontSize: 12}}>Xem thêm &gt;</Text>
+          </TouchableOpacity>
+        </View>
+        
       </View>
       <View>
         <Text
@@ -241,7 +273,7 @@ export const ProductDetail = (props) => {
     <ScrollView>
       <View style={styles.container}>
         <ImageView id={id}/>
-        <InfoView id={id} slug={slug} handleClick={handleClick}/>
+        <InfoView id={id} slug={slug} handleClick={handleClick} navigation={navigation}/>
       </View>
     </ScrollView>
   );
@@ -303,5 +335,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     justifyContent: "center",
     alignItems: "center",
+  },
+  right_icon: {
+    alignSelf: 'stretch'
   },
 });

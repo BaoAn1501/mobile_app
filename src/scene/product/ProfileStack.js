@@ -16,7 +16,7 @@ import ReviewPage from './screens/ReviewPage';
 import ReviewProduct from './screens/ReviewProduct';
 import { YetRoute } from './screens/ReviewPage';
 import { AlreadyRoute } from './screens/ReviewPage';
-
+import ReviewProductList from './screens/ReviewProductList';
 import { EvilIcons } from '@expo/vector-icons';
 
 export default function ProfileStack() {
@@ -37,6 +37,7 @@ export default function ProfileStack() {
             <Stack.Screen name="ReviewProduct" component={ReviewProduct} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
             <Stack.Screen name="YetRoute" component={YetRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
             <Stack.Screen name="AlreadyRoute" component={AlreadyRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
+            <Stack.Screen name="ReviewDetail" component={ReviewProductList} options={{headerTitle: "Đánh giá sản phẩm"}}></Stack.Screen>
 
     </Stack.Navigator>
   )

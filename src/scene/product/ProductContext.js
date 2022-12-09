@@ -4,7 +4,8 @@ import { getCategoriesForHomePage,
     getProductInCategory,
     getOneProduct,
     getOneSizeProduct,
-    saveCart } from './ProductService';
+    saveCart, 
+    reviews } from './ProductService';
 export const ProductContext = createContext();
 
 export const ProductContextProvider = (props) => {
@@ -70,6 +71,16 @@ export const ProductContextProvider = (props) => {
         return false;
     }
 
+    const onReviewAll = async (id) => {
+        try {
+            const res = await reviews(id);
+            return res;
+        } catch(error) {
+            console.log('get product size error: ', error);
+        }
+        return false;
+    }
+
     return (
         <ProductContext.Provider
             value={{
@@ -79,6 +90,7 @@ export const ProductContextProvider = (props) => {
                 onGetProduct,
                 onGetProductSize,
                 onSaveCart,
+                onReviewAll
             }}
         >
             {children}
