@@ -39,7 +39,7 @@ const BodyRBSheet = forwardRef((props, ref) => {
             <Text style={{color: 'green'}}>{item.default==true ? 'Mặc định' : '' }</Text>
           </View>
           <Text style={styles.sđt}>SĐT: {item.phone_number}</Text>
-          <Text numberOfLines={1} style={styles.diaChi}>Địa chỉ: {item.address}</Text>
+          <Text>Địa chỉ: số nhà {item.number}, đường {item.street}, phường {item.ward}, quận {item.district}, {item.city}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -51,6 +51,7 @@ const BodyRBSheet = forwardRef((props, ref) => {
             // dk ? (dung) : (sai)
             addresses.length > 0 ? (
               <FlatList
+                style={{backgroundColor: 'grey'}}
                 data={addresses}
                 renderItem={({item}) => {
                   return <ItemAddress item={item} />
@@ -169,26 +170,17 @@ const CheckOut = (props) => {
     return image;
   }
   
-  async function chooseAddress (address) {
-    const res = await onGetOneAddress(userID, address);
+  async function chooseAddress (id) {
+    const res = await onGetOneAddress(userID, id);
     console.log('address chosen: ', res);
-    const _address = {
-        _id: res._id,
-        address: 'số ' + res.number
-        + ', đường ' + res.street
-        + ', phường ' + res.ward
-        + ', quận ' + res.district
-        + ', ' + res.city,
-        phone_number: res.phone_number,
-        default: res.default,
-        user_id: res.user_id
-    }
-    setAddress(_address);
+    setAddress(res);
   }
 
   const handleCheckOut = () => {
     if(selected==0){
       ToastAndroid.show('Bạn chưa chọn phương thức thanh toán', ToastAndroid.BOTTOM);
+    } else if(!address){
+      ToastAndroid.show('Bạn chưa có địa chỉ giao hàng', ToastAndroid.BOTTOM);
     } else {
       if(selected==1){
         checkOut();
@@ -204,15 +196,27 @@ const CheckOut = (props) => {
             <Text style={{ fontSize: 16, margin: 8 }}>Địa chỉ nhận hàng</Text>
             <View style={styles.addressContainer}>
             <View style={styles.address}>
+              { 
+                address ? 
+                <View>
                   <Text>Tên: {address.user_id ? address.user_id.full_name : ''}</Text>
                   <Text style={styles.sđt}>SĐT: {address.phone_number}</Text>
-                  <Text numberOfLines={1} style={styles.diaChi}>
-                    Địa chỉ: {address.address}
+                  <Text style={styles.diaChi}>
+                    Địa chỉ: số nhà {address.number}, đường {address.street}, phường {address.ward}, quận {address.district}, {address.city}
                   </Text>
+                </View> 
+                : 
+                <View>
+                  <Text>Chưa có địa chỉ nhận hàng.</Text>
+                  <TouchableOpacity onPress={()=>navigation.navigate('Address')}>
+                    <Text style={{color: 'green'}}> Thêm địa chỉ</Text>
+                  </TouchableOpacity>
                 </View>
-              <TouchableOpacity onPress={() => refRBSheet.current.open()}>
-                <Text style={{ color: "green" }}>Thay đổi</Text>
-              </TouchableOpacity>
+              }
+            </View>
+            <TouchableOpacity onPress={() => refRBSheet.current.open()}>
+              <Text style={{ color: "green" }}>Thay đổi</Text>
+            </TouchableOpacity>
             </View>
             <Text style={{ fontSize: 16, margin: 8 }}>Đơn hàng của bạn</Text>
             <View style={styles.productsContainer}>
@@ -281,6 +285,8 @@ const styles = StyleSheet.create({
   address: {
     width: "100%",
     padding: 8,
+    marginBottom: 5,
+    backgroundColor: 'white'
   },
   itemContainer: {
     backgroundColor: "white",

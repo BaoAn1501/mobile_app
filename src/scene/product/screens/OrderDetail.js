@@ -31,7 +31,7 @@ const OrderDetail = (props) => {
         setAddress(res.address);
       }
     })();
-  }, []);
+  }, [list]);
 
   const OrderItem = ({ item }) => {
     return (

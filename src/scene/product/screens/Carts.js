@@ -57,7 +57,7 @@ export const Carts = (props) => {
         setTotal(total);
       });
     })();
-  }, []);
+  }, [carts]);
 
   async function plus(cid) {
     await onPlusCart(userID, cid);

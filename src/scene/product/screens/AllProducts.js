@@ -18,7 +18,7 @@ const AllProducts = (props) => {
     }
     getProductsInCategory();
     console.log(IP, "IP");
-  }, []);
+  }, [products]);
 
   function convertIP(image) {
     image = image.replace("localhost", IP);

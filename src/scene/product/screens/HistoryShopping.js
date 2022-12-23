@@ -18,7 +18,7 @@ export const SuccessRoute = (props) => {
           setOrders(res1);
         }
     })()
-  }, []);
+  }, [orders]);
 
   const SetTime = (time) => {
     return String(time).slice(0, 19).replace('T', ' ');
@@ -81,7 +81,7 @@ export const CancelRoute = (props) => {
           setOrders(res1);
         }
     })()
-  }, []);
+  }, [orders]);
 
   const SetTime = (time) => {
     return String(time).slice(0, 19).replace('T', ' ');

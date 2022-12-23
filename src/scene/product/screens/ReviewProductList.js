@@ -20,7 +20,7 @@ const ReviewProductList = (props) => {
                 setList(res);
             }
         })()
-    }, []);
+    }, [list]);
 
     function convertIP(image) {
         image = image.replace("localhost", IP);

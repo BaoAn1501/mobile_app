@@ -28,7 +28,7 @@ export const YetRoute = (props) => {
         setReviews(res);
       }
     })();
-  }, []);
+  }, [reviews]);
   
   const RenderItem1 = ({item}) => {
     return(
@@ -79,7 +79,7 @@ export const AlreadyRoute = (props) => {
         setReviews(res);
       }
     })();
-  }, []);
+  }, [reviews]);
   
   const RenderItem2 = ({item}) => {
     return(

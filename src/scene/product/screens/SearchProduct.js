@@ -50,7 +50,7 @@ export const SearchProduct = (props) => {
         setSearchWord(res);
       }
     })();
-  }, []);
+  }, [searchWord]);
 
   async function DeleteSearchItem(id){
     const res = await onDeleteSearch(userID, id);

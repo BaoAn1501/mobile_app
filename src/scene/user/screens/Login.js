@@ -80,18 +80,7 @@ const SignIn = (props) => {
                     </Pressable>
 
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View style={{ flex: 1, height: 1, backgroundColor: '#E0E0E0', margin: 20 }} />
-                    <View>
-                        <Text style={{ width: 15, textAlign: 'center' }}>or</Text>
-                    </View>
-                    <View style={{ flex: 1, height: 1, backgroundColor: '#E0E0E0', margin: 20 }} />
-                </View>
-
-                <View style={styles.other}>
-                    <Image style={[styles.icon, styles.iconGG]} source={require('../../../assets/images/google_icon.png')}/>
-                    <Image style={[styles.icon, styles.iconFB]} source={require('../../../assets/images/facebook_icon.png')}/>
-                </View>
+                
                 <View style={styles.textSignUp}>
                     <Text>
                         Chưa có tài khoản ? 

@@ -78,7 +78,7 @@ const RenderAddressItem = ({ item }) => {
           <Text style={{color: 'green'}}>{item.default==true ? 'Mặc định' : '' }</Text>
         </View>
         <Text style={styles.sđt}>SĐT: {item.phone_number}</Text>
-        <Text numberOfLines={1} style={styles.diaChi}>Địa chỉ: {item.address}</Text>
+        <Text style={styles.diaChi}>Địa chỉ: số nhà {item.number}, đường {item.street}, phường {item.ward}, quận {item.district}, {item.city}</Text>
       </View>
       <Dialog.Container style={styles.dialog} visible={visible}>
         <Dialog.Title>Xóa địa chỉ</Dialog.Title>
@@ -301,7 +301,7 @@ const MyAddresses = (props) => {
       const res = await onGetAllAddress(userID);
       setAddresses(res);
     })();
-  }, []);
+  }, [addresses]);
 
   return (
     <SafeAreaView>
@@ -362,8 +362,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: "100%",
     padding: 8,
-    height: 80,
-    backgroundColor: 'white'
+    height: 100,
+    backgroundColor: 'white',
+    justifyContent: 'center'
   },
   diaChi: {
     flexWrap: "wrap",
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 80,
-    height: 80,
+    height: 100,
     marginTop: 10,
     borderRadius: 3,
     borderWidth: 1,

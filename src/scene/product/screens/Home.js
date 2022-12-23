@@ -33,7 +33,7 @@ const Home = (props) => {
     }
     getCategories();
     
-  }, []);
+  }, [categories]);
 
   useEffect(() => {
     async function getProducts() {
@@ -43,7 +43,7 @@ const Home = (props) => {
     }
     getProducts();
     
-  }, []);
+  }, [products]);
 
   function convertIP(image) {
     image = image.replace("localhost", IP);

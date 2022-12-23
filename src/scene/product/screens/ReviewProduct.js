@@ -13,7 +13,7 @@ const ReviewProduct = (props) => {
   } = props;
 
   const { userID, onRate } = useContext(UserContext);
-  const [score, setScore] = useState('');
+  const [score, setScore] = useState(5);
   const [remarks, setRemarks] = useState('');
   
   async function Rate () {
@@ -37,7 +37,7 @@ const ReviewProduct = (props) => {
         type='star'
         ratingColor="yellow"
         ratingCount={5.0}
-        startingValue={5.0}
+        startingValue={score}
         minValue={1}
         onSwipeRating={true}
         jumpValue={0.5}
