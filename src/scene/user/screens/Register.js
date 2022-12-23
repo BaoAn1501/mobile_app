@@ -17,6 +17,8 @@ const SignUp = (props) => {
     const [hidePass2, setHidePass2] = useState(true);
     const [myIcon1, setMyIcon1] = useState('');
     const [myIcon2, setMyIcon2] = useState('');
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
     
     useEffect(() => {
         if(!password){
@@ -53,11 +55,15 @@ const SignUp = (props) => {
             }
         }
     }
+    
     const register = async () => {
         if(!fullName || !email || !password || !confirmPassword
             || fullName.trim().length==0 || email.trim().length==0 || password.trim().length==0
             || confirmPassword.trim().length==0){
             ToastAndroid.show('Bạn chưa nhập đầy đủ thông tin', ToastAndroid.BOTTOM);
+            return;
+        } else if(!email.trim().match(emailRegex)){
+            ToastAndroid.show('Email không đúng định dạng', ToastAndroid.BOTTOM);
             return;
         } else if(password.length<8){
             ToastAndroid.show('Mật khẩu phải có ít nhất 8 ký tự', ToastAndroid.BOTTOM);

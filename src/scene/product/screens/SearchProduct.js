@@ -50,7 +50,7 @@ export const SearchProduct = (props) => {
         setSearchWord(res);
       }
     })();
-  }, [searchWord]);
+  }, []);
 
   async function DeleteSearchItem(id){
     const res = await onDeleteSearch(userID, id);
@@ -107,7 +107,7 @@ export const SearchProduct = (props) => {
         <Image
           style={{width: 50, height: 50}}
           resizeMode="contain"
-          source={{ uri: convertIP(item.image1) }}
+          source={{ uri: convertIP(item.images[0]) }}
         />
         <View style={{marginLeft: 16, justifyContent: 'center'}}>
           <Text numberOfLines={1} style={{}}>

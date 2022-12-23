@@ -1,11 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
+import  React,{ useContext, useEffect, useState } from 'react';
 import {
     StyleSheet, Text, View, Image, TextInput, Pressable,
     KeyboardAvoidingView, ScrollView, ToastAndroid
 } from 'react-native'
-
+import { UserContext } from '../UserContext';
 const ForgotPass = (props) => {
+
     const {navigation} = props;
+    const {onResetPass} = useContext(UserContext);
+    const [email, setEmail] = useState('');
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    async function ResetPassword() {
+        if(!email || email.trim().length==0){
+            ToastAndroid.show('Bạn chưa nhập vào địa chỉ email', ToastAndroid.BOTTOM);
+            return;
+        } else if(!email.trim().match(emailRegex)){
+            ToastAndroid.show('Email không đúng định dạng', ToastAndroid.BOTTOM);
+            return;
+        } else {
+            const res = await onResetPass(email);
+            if(res){
+                if(res.message){
+                    ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+                }
+            }
+        }
+    }
     return (
         // <KeyboardAvoidingView>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
@@ -15,9 +37,12 @@ const ForgotPass = (props) => {
                     <Text style={styles.cafeText}>Quên mật khẩu</Text>
                 </View>
                 <View style={styles.TextInputContainer}>
+                    <Text style={{textAlign: 'center', fontSize: 16, marginVertical: 10}}>Liên kết đặt lại mật khẩu sẽ được gửi đến email của bạn</Text>
                     <TextInput
-                        style={styles.textInput} placeholder='Email' />       
-                    <Pressable style={styles.buttonContainer}
+                        style={styles.textInput} onChangeText={setEmail} placeholder='Nhập vào email' />       
+                    <Pressable
+                        onPress={()=>ResetPassword()} 
+                        style={styles.buttonContainer}
                     >
                         <Text style={styles.login}>Lấy lại mật khẩu</Text>
                     </Pressable>
@@ -53,12 +78,12 @@ const styles = StyleSheet.create({
     },
     cafeContainer: {
         paddingLeft: 10,
-        paddingVertical: 20
     },
     cafeText: {
         color: '#000000',
         fontWeight: '700',
-        fontSize: 36
+        fontSize: 36,
+        textAlign: 'center'
     },
     TextInputContainer: {
         paddingHorizontal: 10,

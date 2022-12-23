@@ -33,11 +33,11 @@ export const YetRoute = (props) => {
   const RenderItem1 = ({item}) => {
     return(
       <View style={styles.item1}>
-        <View style={{flexDirection: 'row'}}>
-          <Image style={{height: 50, width: 50}} source={{uri: convertIP(item.product_id.image1)}}/>
+        <View style={{flexDirection: 'row', width: 200}}>
+          <Image style={{height: 50, width: 50}} source={{uri: convertIP(item.product_id.images[0])}}/>
           <View style={{marginLeft: 20, paddingVertical: 10}}>
-            <Text>Thời gian: {SetTime(item.updatedAt)}</Text>
-            <Text style={{marginTop: 10}}>Tên món: {item.product_id.name}</Text>
+            <Text>{SetTime(item.updatedAt)}</Text>
+            <Text style={{marginTop: 10}} numberOfLines={1}>Tên món: {item.product_id.name}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={()=>navigation.navigate("ReviewProduct", {id: item._id})}>
@@ -85,7 +85,7 @@ export const AlreadyRoute = (props) => {
     return(
       <View style={styles.item1}>
         <View style={{flexDirection: 'row'}}>
-          <Image style={{height: 50, width: 50}} source={{uri: convertIP(item.product_id.image1)}}/>
+          <Image style={{height: 50, width: 50}} source={{uri: convertIP(item.product_id.images[0])}}/>
           <View style={{marginLeft: 20, paddingVertical: 10}}>
             <Text>Thời gian: {SetTime(item.updatedAt)}</Text>
             <Text style={{marginTop: 10}}>Tên món: {item.product_id.name}</Text>

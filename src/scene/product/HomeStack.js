@@ -25,7 +25,7 @@ export default function HomeStack() {
             <Stack.Screen name="CheckOut" component={CheckOut} options={{headerTitle: "Trang thanh toán"}}></Stack.Screen>
             <Stack.Screen name="ProductsInCategory" component={ProductsInCategory} options={{headerTitle: ""}}></Stack.Screen>
             <Stack.Screen name="ReviewProduct" component={ReviewProduct} options={{headerTitle: "Đánh giá sản phẩm"}}></Stack.Screen>
-            <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerTitle: "Hóa đơn chi tiết"}}></Stack.Screen>
+            <Stack.Screen name="OrderDetail" component={OrderDetail} options={{headerTitle: "Trang chi tiết đơn hàng"}}></Stack.Screen>
             <Stack.Screen name="YetRoute" component={YetRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
             <Stack.Screen name="AlreadyRoute" component={AlreadyRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
             <Stack.Screen name="ReviewDetail" component={ReviewProductList} options={{headerTitle: "Đánh giá sản phẩm"}}></Stack.Screen>

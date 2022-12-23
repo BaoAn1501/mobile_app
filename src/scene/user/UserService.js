@@ -6,6 +6,7 @@ export const login = async (email, password) => {
         email : email,
         password: password
     }
+    console.log('run login');
     const response = await axiosInstance.post(constants.API_LOGIN, data);
     return response;
 }
@@ -20,6 +21,35 @@ export const register = async (full_name, email, password, confirm_password) => 
     const response = await axiosInstance.post(constants.API_REGISTER, data);
     return response;
 }
+
+export const changePass = async (id, oldPass, newPass) => {
+    const data = {
+        password: oldPass,
+        newPassword: newPass,
+    }
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/changePass`, data);
+    return response;
+}
+
+export const resetPass = async (email) => {
+    const data = {
+        email: email
+    }
+    const response = await axiosInstance.post(`${constants.API_RESET}`, data);
+    return response;
+}
+
+
+// export const logout = async (userID) => {
+//     const data = {
+//         full_name: full_name,
+//         email : email,
+//         password: password,
+//         confirm_password: confirm_password,
+//     }
+//     const response = await axiosInstance.post(constants.API_REGISTER, data);
+//     return response;
+// }
 
 export const getUser = async (id) => {
     const response = await axiosInstance.get(`${constants.API_USERS}/${id}`);
@@ -116,12 +146,22 @@ export const getPendingOrders = async (id) => {
 }
 
 export const getSuccessOrders = async (id) => {
-    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders/success/get`);
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders/taken/get`);
+    return response;
+}
+
+export const getShippingOrders = async (id) => {
+    const response = await axiosInstance.get(`${constants.API_USERS}/${id}/orders/shipping/get`);
     return response;
 }
 
 export const cancelOrder = async (id, ido) => {
     const response = await axiosInstance.post(`${constants.API_USERS}/${id}/orders/${ido}/cancel`);
+    return response;
+}
+
+export const receiveOrder = async (id, ido) => {
+    const response = await axiosInstance.post(`${constants.API_USERS}/${id}/orders/${ido}/receive`);
     return response;
 }
 

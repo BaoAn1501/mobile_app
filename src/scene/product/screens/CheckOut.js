@@ -145,7 +145,7 @@ const CheckOut = (props) => {
           <Image
             style={styles.image}
             resizeMode="contain"
-            source={{ uri: convertIP(item.productSize_id.product_id.image1) }}
+            source={{ uri: convertIP(item.productSize_id.product_id.images[0]) }}
           />
           <View style={styles.info}>
             <Text numberOfLines={1} style={styles.name}>

@@ -36,7 +36,7 @@ const ImageView = (props) => {
   useEffect(()=> {
     ( async function getProduct() {
       const resP = await onGetProduct(id);
-      setImages([resP[0].image1, resP[0].image2, resP[0].image3]);
+      setImages(resP[0].images);
     } )()
   }, [])
 

@@ -21,6 +21,7 @@ import {
   getCancelOrders,
   getPendingOrders,
   getSuccessOrders,
+  getShippingOrders,
   getOneOrder,
   cancelOrder,
   rate,
@@ -30,6 +31,9 @@ import {
   createSearch,
   deleteSearch,
   showSearch,
+  receiveOrder,
+  changePass,
+  resetPass,
 } from "./UserService";
 import { constants } from "../../utils/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -58,9 +62,35 @@ export const UserContextProvider = (props) => {
     return false;
   };
 
+  const onLogout = () => {
+    setIsLogged(false);
+  }
+
   const onRegister = async (full_name, email, password, confirm_password) => {
     try {
       const res = await register(full_name, email, password, confirm_password);
+      console.log("res context: ", res);
+      return res;
+    } catch (error) {
+      console.log("onRegister error: ", error);
+    }
+    return false;
+  };
+
+  const onChangePass = async (id, oldPass, newPass) => {
+    try {
+      const res = await changePass(id, oldPass, newPass);
+      console.log("res context: ", res);
+      return res;
+    } catch (error) {
+      console.log("onRegister error: ", error);
+    }
+    return false;
+  };
+
+  const onResetPass = async (email) => {
+    try {
+      const res = await resetPass(email);
       console.log("res context: ", res);
       return res;
     } catch (error) {
@@ -250,6 +280,16 @@ export const UserContextProvider = (props) => {
       return false;
   }
 
+  const onGetShippingOrders = async (id) => {
+    try {
+        const res = await getShippingOrders(id);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
   const onGetOneOrder = async (id, ido) => {
     try {
         const res = await getOneOrder(id, ido);
@@ -263,6 +303,16 @@ export const UserContextProvider = (props) => {
   const onCancelOrder = async (id, ido) => {
     try {
         const res = await cancelOrder(id, ido);
+        return res;
+      } catch (error) {
+        console.log("onGetCart error: ", error);
+      }
+      return false;
+  }
+
+  const onReceiveOrder = async (id, ido) => {
+    try {
+        const res = await receiveOrder(id, ido);
         return res;
       } catch (error) {
         console.log("onGetCart error: ", error);
@@ -365,15 +415,20 @@ export const UserContextProvider = (props) => {
         onGetCancelOrders,
         onGetPendingOrders,
         onGetSuccessOrders,
+        onGetShippingOrders,
         onGetOneOrder,
         onCancelOrder,
+        onReceiveOrder,
         onRate,
         onGetReviewsYet,
         onGetReviewsAlready,
         onSearch,
         onCreateSearch,
         onDeleteSearch,
-        onShowSearch
+        onShowSearch,
+        onLogout,
+        onChangePass,
+        onResetPass
       }}
     >
       {children}

@@ -10,7 +10,7 @@ const OrderDetail = (props) => {
       params: { id },
     },
   } = props;
-  const { userID, onGetOneOrder, onCancelOrder } = useContext(UserContext);
+  const { userID, onGetOneOrder, onCancelOrder, onReceiveOrder } = useContext(UserContext);
   const [order, setOrder] = useState([]);
   const [list, setList] = useState([]);
   const [user, setUser] = useState([]);
@@ -31,7 +31,7 @@ const OrderDetail = (props) => {
         setAddress(res.address);
       }
     })();
-  });
+  }, []);
 
   const OrderItem = ({ item }) => {
     return (
@@ -75,13 +75,22 @@ const OrderDetail = (props) => {
     }
     return result;
   }
-
+  
   async function CancelOrder() {
     const res = await onCancelOrder(userID, order._id);
     if(res){
       navigation.goBack();
     } else {
       ToastAndroid.show('Lỗi khi hủy đơn hàng', ToastAndroid.BOTTOM);
+    }
+  }
+
+  async function ReceiveOrder() {
+    const res = await onReceiveOrder(userID, order._id);
+    if(res){
+      navigation.goBack();
+    } else {
+      ToastAndroid.show('Không nhận được hàng', ToastAndroid.BOTTOM);
     }
   }
 
@@ -128,7 +137,11 @@ const OrderDetail = (props) => {
               <TouchableOpacity onPress={()=>CancelOrder()} style={styles.button}>
                 <Text style={{color: 'white', fontWeight: 'bold'}}>Hủy</Text>
               </TouchableOpacity>
-              : <></>
+              : (code==2) ?
+              <TouchableOpacity onPress={()=>ReceiveOrder()} style={styles.button}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Nhận hàng</Text>
+              </TouchableOpacity> 
+              : <></> 
             }
           </View>
         </View>

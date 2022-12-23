@@ -47,7 +47,6 @@ export const CustomerNavigation = () => {
                 headerShown: false
             })}>
                 <Tabs.Screen name="Home" component={HomeStack}></Tabs.Screen>
-                <Tabs.Screen name="Chat" component={Chat}></Tabs.Screen>
                 <Tabs.Screen name="Ordering" component={Ordering}></Tabs.Screen>
                 <Tabs.Screen name="Profile" component={ProfileStack}></Tabs.Screen>
             </Tabs.Navigator>

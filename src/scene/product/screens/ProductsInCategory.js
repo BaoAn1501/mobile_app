@@ -39,7 +39,7 @@ const ProductsInCategory = (props) => {
         <Image
           style={styles.productsInCategoryImage}
           resizeMode="cover"
-          source={{ uri: convertIP(item.image1) }}
+          source={{ uri: convertIP(item.images[0]) }}
         />
         <View style={styles.productsInCategoryInfoContainer}>
           <View style={styles.productsInCategoryNameContainer}>
@@ -51,7 +51,7 @@ const ProductsInCategory = (props) => {
           <View style={styles.productsInCategoryPriceContainer}>
             <Text style={styles.productsInCategoryPrice}>{item.price} đ</Text>
             <View style={styles.productsInCategoryRatingContainer}>
-              <Text style={styles.productsInCategoryRating}>{item.rating}</Text>
+              <Text style={styles.productsInCategoryRating}>{Number((item.rating).toFixed(1))}</Text>
               <Entypo
                 style={{ marginTop: 2 }}
                 name="star"

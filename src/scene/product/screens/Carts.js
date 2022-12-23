@@ -98,35 +98,41 @@ export const Carts = (props) => {
           <Image
             style={styles.image}
             resizeMode="contain"
-            source={{ uri: convertIP(item.productSize_id.product_id.image1) }}
+            source={{ uri: convertIP(item.productSize_id.product_id.images[0]) }}
           />
-          <View style={styles.info}>
+        </View>
+        <View style={styles.rightPart}>
+          <View style={styles.upPart}>
             <Text numberOfLines={1} style={styles.name}>
               {item.productSize_id.product_id.name}
             </Text>
-            <Text style={styles.size}>
-              {item.productSize_id.size_id.symbol}
-            </Text>
-            <Text style={styles.price}>{item.productSize_id.price} đ</Text>
           </View>
-        </View>
-        <View style={styles.rightPart}>
-          <TouchableOpacity
-            onPress={() => minus(item._id)}
-            style={[styles.actionContainer, styles.actionLeft]}
-          >
-            <Text style={styles.actionText}>-</Text>
-          </TouchableOpacity>
-          <View style={styles.quantityContainer}>
-            <Text style={styles.quantity}>{item.quantity}</Text>
+          <View style={styles.downPart}>
+            <View style={styles.leftDownPart}>
+              <Text style={styles.size}>
+                Size: {item.productSize_id.size_id.symbol}
+              </Text>
+              <Text style={{marginTop: 10}}>{item.productSize_id.price} đ</Text>
+            </View>
+            <View style={styles.rightDownPart}>
+              <TouchableOpacity
+              onPress={() => minus(item._id)}
+              style={[styles.actionContainer, styles.actionLeft]}
+              >
+              <Text style={styles.actionText}>-</Text>
+              </TouchableOpacity>
+              <View style={styles.quantityContainer}>
+                <Text style={styles.quantity}>{item.quantity}</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => plus(item._id)}
+                style={[styles.actionContainer, styles.actionRight]}
+              >
+                <Text style={styles.actionText}>+</Text>
+              </TouchableOpacity>
+              <MaterialIcons onPress={()=>deleteItem(item._id)} style={{marginLeft: 20}} name="highlight-remove" size={24} color="gray" />
+            </View>
           </View>
-          <TouchableOpacity
-            onPress={() => plus(item._id)}
-            style={[styles.actionContainer, styles.actionRight]}
-          >
-            <Text style={styles.actionText}>+</Text>
-          </TouchableOpacity>
-          <MaterialIcons onPress={()=>deleteItem(item._id)} style={{marginLeft: 20}} name="highlight-remove" size={24} color="gray" />
         </View>
       </View>
     );
@@ -135,6 +141,7 @@ export const Carts = (props) => {
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
+        
         <View style={styles.leftFooter}>
             <Text>Tổng tiền:</Text>
             <Text style={styles.total}>{total} đ</Text>
@@ -178,13 +185,11 @@ const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: "white",
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
     borderWidth: 0.5,
     borderColor: "white",
     borderRadius: 3,
-    marginHorizontal: 10,
     marginTop: 8,
     shadowColor: "black",
     shadowOffset: {
@@ -195,18 +200,16 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
   },
   leftPart: {
+    width: windowWidth*0.22,
     flexDirection: "row",
     alignItems: "center",
   },
-  rightPart: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  rightPart:{
+    marginLeft: 10
   },
   info: {
     height: 80,
     width: 100,
-    justifyContent: "space-between",
     paddingVertical: 5,
     marginLeft: 10
   },
@@ -287,5 +290,20 @@ const styles = StyleSheet.create({
   button: {},
   buttonText: {
     color: "white",
+  },
+  upPart: {
+
+  },
+  downPart: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  rightDownPart: {
+    width: windowWidth*0.56,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: 'flex-end',
+   
   },
 });

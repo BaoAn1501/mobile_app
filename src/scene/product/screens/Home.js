@@ -65,7 +65,7 @@ const Home = (props) => {
         <Image
           style={styles.productImage}
           resizeMode="cover"
-          source={{ uri: convertIP(item.image1)}}
+          source={{ uri: convertIP(item.images[0])}}
         />
         <View style={styles.productInfoContainer}>
           <View style={styles.productNameContainer}>
@@ -77,7 +77,7 @@ const Home = (props) => {
           <View style={styles.productPriceContainer}>
             <Text style={styles.productPrice}>{item.price} đ</Text>
             <View style={styles.productRatingContainer}>
-              <Text style={styles.productRating}>{item.rating}</Text>
+              <Text style={styles.productRating}>{Number((item.rating).toFixed(1))}</Text>
               <Entypo
                 style={{ marginTop: 2 }}
                 name="star"

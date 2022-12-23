@@ -301,7 +301,7 @@ const MyAddresses = (props) => {
       const res = await onGetAllAddress(userID);
       setAddresses(res);
     })();
-  }, [addresses]);
+  }, []);
 
   return (
     <SafeAreaView>

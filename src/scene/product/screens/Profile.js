@@ -12,7 +12,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const Profile = (props) => {
   const { navigation } = props;
-  const { onGetUser, userID } = useContext(UserContext);
+  const { onGetUser, userID, onLogout } = useContext(UserContext);
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -175,26 +175,7 @@ const Profile = (props) => {
 
         <View style={styles.partContainer}>
           <Text style={styles.part_title}>App Settings</Text>
-          <View style={styles.row}>
-            <View style={styles.left_part}>
-              <FontAwesome
-                style={styles.icon}
-                resizeMode="cover"
-                name="bell"
-                size={15}
-                color="#828282"
-              />
-              <Text style={styles.text}>Thông báo</Text>
-            </View>
-
-            <FontAwesome
-              style={styles.right_icon}
-              resizeMode="cover"
-              name="toggle-on"
-              size={18}
-              color="#4CD964"
-            />
-          </View>
+          
 
           <View style={[styles.row, {marginBottom: 20}]}>
             <View style={styles.left_part}>
@@ -213,6 +194,9 @@ const Profile = (props) => {
               name="navigate-next"
               size={18}
               color="#828282"
+              onPress={() => {
+                onLogout();
+              }}
             />
           </View>
         </View>
