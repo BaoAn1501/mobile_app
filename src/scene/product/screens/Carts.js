@@ -90,6 +90,16 @@ export const Carts = (props) => {
     }
   }
 
+  function toCheckOut(){
+    console.log('checkout');
+    if(carts.length==0){
+      ToastAndroid.show('Không có sản phẩm nào trong giỏ hàng', ToastAndroid.BOTTOM);
+    } else {
+      ToastAndroid.show('Đến trang thanh toán', ToastAndroid.BOTTOM);
+      navigation.navigate('CheckOut')
+    }
+  }
+
   const cartItem = ({ item }) => {
     
     return (
@@ -147,7 +157,7 @@ export const Carts = (props) => {
             <Text style={styles.total}>{total} đ</Text>
         </View>
         <View style={styles.rightFooter}>
-          <Pressable style={styles.button} onPress={() => {navigation.navigate('CheckOut'), console.log('to checkout')}}>
+          <Pressable style={styles.button} onPress={()=>toCheckOut()}>
             <Text style={styles.buttonText}>Thanh toán</Text>
           </Pressable>
         </View>

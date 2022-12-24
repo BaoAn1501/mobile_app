@@ -179,6 +179,8 @@ const CheckOut = (props) => {
   const handleCheckOut = () => {
     if(selected==0){
       ToastAndroid.show('Bạn chưa chọn phương thức thanh toán', ToastAndroid.BOTTOM);
+    } else if(selected==2){
+      ToastAndroid.show('Chức năng này hiện đang bảo trì', ToastAndroid.BOTTOM);
     } else if(!address){
       ToastAndroid.show('Bạn chưa có địa chỉ giao hàng', ToastAndroid.BOTTOM);
     } else {
