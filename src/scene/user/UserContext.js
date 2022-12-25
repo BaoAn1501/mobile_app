@@ -62,7 +62,7 @@ export const UserContextProvider = (props) => {
     return false;
   };
 
-  const onLogout = () => {
+  const onLogout = async () => {
     setIsLogged(false);
   }
 
@@ -83,7 +83,7 @@ export const UserContextProvider = (props) => {
       console.log("res context: ", res);
       return res;
     } catch (error) {
-      console.log("onRegister error: ", error);
+      console.log("onChangePass error: ", error);
     }
     return false;
   };
@@ -94,7 +94,7 @@ export const UserContextProvider = (props) => {
       console.log("res context: ", res);
       return res;
     } catch (error) {
-      console.log("onRegister error: ", error);
+      console.log("onResetPass error: ", error);
     }
     return false;
   };
@@ -104,7 +104,7 @@ export const UserContextProvider = (props) => {
       const res = await getUser(id);
       return res;
     } catch (error) {
-      console.log("onRegister error: ", error);
+      console.log("onGetUser error: ", error);
     }
     return false;
   };
@@ -114,7 +114,7 @@ export const UserContextProvider = (props) => {
       const res = await changeName(id, full_name);
       return res;
     } catch (error) {
-      console.log("onRegister error: ", error);
+      console.log("onChangeName error: ", error);
     }
     return false;
   };
@@ -134,7 +134,7 @@ export const UserContextProvider = (props) => {
       const res = await getOneAddress(id, ida);
       return res;
     } catch (error) {
-      console.log("onGetAllAddress error: ", error);
+      console.log("onGetOneAddress error: ", error);
     }
     return false;
   };
@@ -144,7 +144,7 @@ export const UserContextProvider = (props) => {
       const res = await getDefaultAddress(id);
       return res;
     } catch (error) {
-      console.log("onGetAllAddress error: ", error);
+      console.log("onGetDefaultAddress error: ", error);
     }
     return false;
   };
@@ -154,7 +154,7 @@ export const UserContextProvider = (props) => {
       const res = await addAddress(id, body);
       return res;
     } catch (error) {
-      console.log("onGetAllAddress error: ", error);
+      console.log("onAddAddress error: ", error);
     }
     return false;
   };
@@ -164,7 +164,7 @@ export const UserContextProvider = (props) => {
       const res = await deleteAddress(id, ida);
       return res;
     } catch (error) {
-      console.log("onGetAllAddress error: ", error);
+      console.log("onDeleteAddress error: ", error);
     }
     return false;
   };
@@ -175,7 +175,7 @@ export const UserContextProvider = (props) => {
       console.log('run update address in context');
       return res;
     } catch (error) {
-      console.log("onGetAllAddress error: ", error);
+      console.log("onUpdateAddress error: ", error);
     }
     return false;
   };

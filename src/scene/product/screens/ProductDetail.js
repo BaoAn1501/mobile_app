@@ -122,12 +122,15 @@ const InfoView = (props) => {
   }
 
   async function saveCart (id, slug, user_id) {
-    const res = await onSaveCart(id, slug, user_id);
-    if(res){
-      ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
-      handleClick();
+    if(product.status.code==2){
+      ToastAndroid.show('Sản phẩm này đã hết. Vui lòng mua sản phẩm khác', ToastAndroid.BOTTOM);
+    } else {
+      const res = await onSaveCart(id, slug, user_id);
+      if(res){
+        ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+        handleClick();
+      }
     }
-
   }
 
   return (

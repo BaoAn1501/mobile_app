@@ -32,10 +32,7 @@ const ProductsInCategory = (props) => {
         style={styles.productsInCategoryItem}
         key={Math.random()}
       >
-        <Image
-          resizeMode="contain" 
-          style={[styles.imgOutOfStock, {display: item.status.code!=2 ? 'none' : 'flex'}]} 
-          source={{uri : 'https://vn-test-11.slatic.net/p/7d0e46288cad767c319ea4aa8e6f8b75.png'}} />
+        <Text style={[styles.imgOutOfStock, {display: item.status.code!=2 ? 'none' : 'flex'}]} >Hết hàng</Text>
         <Image
           style={styles.productsInCategoryImage}
           resizeMode="cover"
@@ -162,6 +159,8 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 120,
     borderRadius: 10,
+    marginTop: 16,
+    marginBottom: 8,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -221,10 +220,12 @@ const styles = StyleSheet.create({
   },
 
   imgOutOfStock: {
-    height: 70,
-    width: 70,
+    fontSize: 16,
+    color: 'red',
     left: 0,
     top: 0,
+    marginLeft: 4,
+    marginTop: 2,
     position: 'absolute'
   },
 

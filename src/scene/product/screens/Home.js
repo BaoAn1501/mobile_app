@@ -58,10 +58,11 @@ const Home = (props) => {
         style={styles.productItem}
         key={item._id}
       >
-        <Image
+        <Text style={[styles.imgOutOfStock, {display: item.status.code!=2 ? 'none' : 'flex'}]} >Hết hàng</Text>
+        {/* <Image
           resizeMode="contain" 
-          style={[styles.imgOutOfStock, {display: item.status.code!=2 ? 'none' : 'flex'}]} 
-          source={{uri : 'https://vn-test-11.slatic.net/p/7d0e46288cad767c319ea4aa8e6f8b75.png'}} />
+          
+          source={{uri : 'https://vn-test-11.slatic.net/p/7d0e46288cad767c319ea4aa8e6f8b75.png'}} /> */}
         <Image
           style={styles.productImage}
           resizeMode="cover"
@@ -271,10 +272,12 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   imgOutOfStock: {
-    height: 70,
-    width: 70,
+    fontSize: 16,
+    color: 'red',
     left: 0,
     top: 0,
+    marginLeft: 4,
+    marginTop: 2,
     position: 'absolute'
   },
   productInfoContainer: {
@@ -317,6 +320,8 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 120,
     borderRadius: 10,
+    marginTop: 16,
+    marginBottom: 8,
     alignItems: "center",
     justifyContent: "center",
   },
