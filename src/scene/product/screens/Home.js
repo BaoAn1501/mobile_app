@@ -10,6 +10,7 @@ import {
   Pressable,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 import { Entypo } from "@expo/vector-icons";
@@ -24,12 +25,16 @@ const Home = (props) => {
     useContext(ProductContext);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [isLoadingCat, setIsLoadingCat] = useState(true);
+  const [isLoadingPro, setIsLoadingPro] = useState(true);
 
   useEffect(() => {
     async function getCategories() {
       const res1 = await onGetCategoriesForHomePage();
-      
-      setCategories(res1);
+      if(res1){
+        setCategories(res1);
+        setIsLoadingCat(false);
+      }
     }
     getCategories();
     
@@ -38,11 +43,12 @@ const Home = (props) => {
   useEffect(() => {
     async function getProducts() {
       const res2 = await onGetProductsForHomePage();
-      
-      setProducts(res2);
+      if(res2){
+        setProducts(res2);
+        setIsLoadingPro(false);
+      }
     }
     getProducts();
-    
   }, [products]);
 
   function convertIP(image) {
@@ -134,6 +140,8 @@ const Home = (props) => {
           </View>
           <View style={styles.categoriesContainer}>
             {
+              isLoadingCat==true ? <ActivityIndicator size="large" color="#00ff00" />
+              :
               <FlatList
                 style={styles.categoriesListContainer}
                 data={categories} //mảng
@@ -153,15 +161,17 @@ const Home = (props) => {
               {" "}
               Uống Gì Hôm Nay ?{" "}
             </Text>
-            <Entypo
+            {/* <Entypo
               name="chevron-right"
               size={30}
               color="#1BAC4B"
               onPress={() => navigation.navigate("AllProducts")}
-            />
+            /> */}
           </View>
           <View style={styles.productsContainer}>
             {
+              isLoadingPro==true ? <ActivityIndicator size="large" color="#00ff00" />
+              :
               <FlatList
                 style={styles.productListContainer}
                 data={products} //mảng

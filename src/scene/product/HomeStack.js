@@ -14,6 +14,7 @@ import ReviewProduct from './screens/ReviewProduct';
 import { YetRoute } from './screens/ReviewPage';
 import { AlreadyRoute } from './screens/ReviewPage';
 import ReviewProductList from './screens/ReviewProductList';
+import MyAddresses from './screens/MyAddresses';
 export default function HomeStack() {
   return (
     <Stack.Navigator>
@@ -29,6 +30,7 @@ export default function HomeStack() {
             <Stack.Screen name="YetRoute" component={YetRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
             <Stack.Screen name="AlreadyRoute" component={AlreadyRoute} options={{headerTitle: "Đánh giá"}}></Stack.Screen>
             <Stack.Screen name="ReviewDetail" component={ReviewProductList} options={{headerTitle: "Đánh giá sản phẩm"}}></Stack.Screen>
+            <Stack.Screen name="Address" component={MyAddresses} options={{headerTitle: "Địa chỉ của tôi"}}></Stack.Screen>
     </Stack.Navigator>
   )
 }

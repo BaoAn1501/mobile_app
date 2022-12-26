@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import  React,{ useContext, useEffect, useState } from 'react';
 import {
     StyleSheet, Text, View, Image, TextInput, Pressable,
-    KeyboardAvoidingView, ScrollView, ToastAndroid
+    KeyboardAvoidingView, ScrollView, ToastAndroid, ActivityIndicator
 } from 'react-native'
 import { UserContext } from '../UserContext';
 const ForgotPass = (props) => {
@@ -10,6 +10,7 @@ const ForgotPass = (props) => {
     const {navigation} = props;
     const {onResetPass} = useContext(UserContext);
     const [email, setEmail] = useState('');
+    const [isLoading, setIsLoading] = useState(false); 
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     async function ResetPassword() {
@@ -20,11 +21,15 @@ const ForgotPass = (props) => {
             ToastAndroid.show('Email không đúng định dạng', ToastAndroid.BOTTOM);
             return;
         } else {
+            setIsLoading(true);
             const res = await onResetPass(email);
             if(res){
                 if(res.message){
+                    setIsLoading(false);
                     ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
                 }
+            } else {
+                setIsLoading(false);
             }
         }
     }
@@ -51,6 +56,11 @@ const ForgotPass = (props) => {
                     <Text onPress={() => navigation.goBack()}
                           style={styles.textNew}>Quay lại</Text>
                 </View>
+                </View>
+                <View style={{marginTop: 20}}>
+                    {
+                        isLoading==true ? <ActivityIndicator size="large" color="#00ff00" /> : <></>
+                    }
                 </View>
             </View>
         </ScrollView>

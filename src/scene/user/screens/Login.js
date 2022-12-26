@@ -2,7 +2,7 @@ import React, {useEffect, useState, useContext} from 'react'
 import { StatusBar } from 'expo-status-bar';
 import {
     StyleSheet, Text, View, Image, TextInput, Pressable,
-    KeyboardAvoidingView, ScrollView, ToastAndroid
+    KeyboardAvoidingView, ScrollView, ToastAndroid, ActivityIndicator
 } from 'react-native';
 import { UserContext } from '../UserContext';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -14,6 +14,10 @@ const SignIn = (props) => {
     const [myIcon, setMyIcon] = useState('');
     const [hidePass, setHidePass] = useState(true);
     const {onLogin} = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
     const checkIcon = () => {
         if(myIcon!=''){
             if(myIcon=='eye'){
@@ -32,13 +36,19 @@ const SignIn = (props) => {
           hidePass==true ? setMyIcon('eye') : setMyIcon('eye-slash');
         }
       });
+
       const onPressLogin = async () => {
         if(!email || !password || email.trim().length==0 || password.trim().length==0){
             ToastAndroid.show('Bạn chưa nhập đầy đủ thông tin', ToastAndroid.CENTER);
             return;
+        } else if(!email.match(emailRegex)) {
+            ToastAndroid.show('Email không đúng định dạng', ToastAndroid.CENTER);
+            return;
         }
+        setIsLoading(true);
         const res = await onLogin(email, password);
         if(res){
+            setIsLoading(false);
             ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
         }
     }
@@ -78,6 +88,11 @@ const SignIn = (props) => {
                     <Pressable style={styles.buttonContainer} onPress={()=>onPressLogin()}>
                         <Text style={styles.login}>Đăng nhập</Text>
                     </Pressable>
+                    <View style={{marginTop: 20}}>
+                        {
+                            isLoading==true ? <ActivityIndicator size="large" color="#00ff00" /> : <></>
+                        }
+                    </View>
 
                 </View>
                 

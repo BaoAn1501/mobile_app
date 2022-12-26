@@ -6,7 +6,8 @@ import {
   View,
   Image,
   Dimensions,
-  ToastAndroid
+  ToastAndroid,
+  ActivityIndicator
 } from "react-native";
 import React, { useContext, useState, useEffect, useRef, forwardRef } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
@@ -84,6 +85,8 @@ const CheckOut = (props) => {
   const refRBSheet = useRef();
   const [address, setAddress] = useState({});
   const [selected, setSelected] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoadingA, setIsLoadingA] = React.useState(true);
   
   const data = [
     {
@@ -103,9 +106,10 @@ const CheckOut = (props) => {
       const res = await onGetDefaultAddress(userID);
       console.log("get default user: ", res);
       setAddress(res);
+      setIsLoadingA(false);
     }
     GetAddress();
-  }, []);
+  }, [address]);
 
   useEffect(() => {
     (async function getMyCart() {
@@ -123,6 +127,7 @@ const CheckOut = (props) => {
   }, []);
 
   async function checkOut(){
+    setIsLoading(true);
     console.log('run checkout');
     const data = {
       address, carts, total, payment_id: Number(selected)
@@ -131,6 +136,7 @@ const CheckOut = (props) => {
     if(res){
       if(res.message){
         ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+        setIsLoading(false);
         navigation.navigate('Home');
       }
     }
@@ -248,6 +254,13 @@ const CheckOut = (props) => {
               <TouchableOpacity style={styles.button} onPress={()=> handleCheckOut()}>
                 <Text>Thanh toán</Text>
               </TouchableOpacity>
+            </View>
+            <View>
+              {
+                isLoading==true ? <ActivityIndicator size="small" color="#00ff00" />
+                :
+                <></>
+              }
             </View>
           </View>
         </View>

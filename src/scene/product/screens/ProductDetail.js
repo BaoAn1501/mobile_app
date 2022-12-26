@@ -7,7 +7,8 @@ import {
   Pressable,
   ToastAndroid,
   Modal,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import React, { useContext, useState } from "react";
@@ -32,11 +33,16 @@ const ImageView = (props) => {
   const {id} = props;
   const { onGetProduct } = useContext(ProductContext);
   const [images, setImages] = useState([]);
+  const [isLoadingImg, setIsLoadingImg] = useState(false);
 
   useEffect(()=> {
     ( async function getProduct() {
+      setIsLoadingImg(true);
       const resP = await onGetProduct(id);
-      setImages(resP[0].images);
+      if(resP){
+        setImages(resP[0].images);
+        setIsLoadingImg(false);
+      }
     } )()
   }, [])
 
@@ -47,23 +53,27 @@ const ImageView = (props) => {
 
   return (
     <View style={styles.imageContainer}>
-      <PagerView
-        style={{ width, height }}
-        initialPage={0}
-        orientation="horizontal"
-      >
-        {images.map((img) => (
-          <Image
-            key={Math.random()}
-            source={{
-              uri: img
-                ? convertIP(img)
-                : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg",
-            }}
-            style={{ width, height, resizeMode: "cover" }}
-          />
-        ))}
-      </PagerView>
+      {
+        isLoadingImg == true ? <ActivityIndicator size="large" color="#00ff00" /> : 
+        <PagerView
+          style={{ width, height }}
+          initialPage={0}
+          orientation="horizontal"
+        >
+          {images.map((img) => (
+            <Image
+              key={Math.random()}
+              source={{
+                uri: img
+                  ? convertIP(img)
+                  : "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg",
+              }}
+              style={{ width, height, resizeMode: "cover" }}
+            />
+          ))}
+        </PagerView>
+      }
+      
     </View>
   );
 }
@@ -78,18 +88,30 @@ const InfoView = (props) => {
   const [productSize, setProductSize] = useState([]);
   const [first, setFirst] = useState(true);
   const [review, setReview] = useState({});
+  const [isLoadingP, setIsLoadingP] = useState(true);
+  const [isLoadingPS, setIsLoadingPS] = useState(true);
+  const [isLoadingS, setIsLoadingS] = useState(true);
+  const [isLoadingR, setIsLoadingR] = useState(true);
 
   useEffect(() => {
-    ( async function getProductSize() {
+    async function getProductSize() {
       const resP = await onGetProductSize(id, slug);
-      setProductSize(resP);
-    } )()
+      if(resP){
+        setProductSize(resP);
+        setIsLoadingPS(false);
+      }
+    }
+    getProductSize();
     async function getProduct() {
       const resP = await onGetProduct(id);
       console.log("product one detail: ", resP[0]);
       setSizes(resP);
+      setIsLoadingS(false);
       setProduct(resP[0]);
+      setIsLoadingP(false);
     }
+    getProduct();
+
     async function getReviews(){
       await onReviewAll(id).then(result => {
         if(result.length > 0){
@@ -108,9 +130,9 @@ const InfoView = (props) => {
             count: 0
           })
         }
+        setIsLoadingR(false);
       })
     }
-    getProduct();
     getReviews();
   }, []);
 
@@ -136,16 +158,20 @@ const InfoView = (props) => {
   return (
     <View style={styles.body}>
       <View>
-        <Text
-          style={{
-            textAlign: "center",
-            fontSize: 20,
-            fontWeight: "700",
-            marginVertical: 10,
-          }}
-        >
-          {product.name}
-        </Text>
+        {
+          isLoadingP==true ? <ActivityIndicator size="small" color="#00ff00" />
+          :
+          <Text
+            style={{
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: "700",
+              marginVertical: 10,
+            }}
+          >
+            {product.name}
+          </Text>
+        }
       </View>
       <View
         style={{
@@ -169,9 +195,13 @@ const InfoView = (props) => {
           <Text style={{ fontSize: 18, color: "#9D9D9D", marginLeft: 6 }}>
             {review.count} reviews
           </Text>
-          <TouchableOpacity onPress={()=> navigation.navigate('ReviewDetail', {id: id})}>
-            <Text style={{color: 'green', fontSize: 12}}>Xem thêm &gt;</Text>
-          </TouchableOpacity>
+          {
+            review.score > 0 ?
+            <TouchableOpacity onPress={()=> navigation.navigate('ReviewDetail', {id: id})}>
+              <Text style={{color: 'green', fontSize: 12}}>Xem thêm &gt;</Text>
+            </TouchableOpacity>
+            : <></>
+          }
         </View>
         
       </View>
@@ -187,64 +217,76 @@ const InfoView = (props) => {
         >
           Giới thiệu
         </Text>
-        <Text
+        {
+          isLoadingP==true ? <ActivityIndicator size="small" color="#00ff00" />
+          :
+          <Text
+            style={{
+              fontSize: 13,
+              marginTop: 5,
+              marginLeft: 32,
+              color: "#7C7C7C",
+            }}
+          >
+            {product.description}
+          </Text>
+        }
+      </View>
+      {
+        isLoadingPS==true ? <ActivityIndicator size="small" color="#00ff00" />
+        :
+        <View
           style={{
-            fontSize: 13,
-            marginTop: 5,
-            marginLeft: 32,
-            color: "#7C7C7C",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 12,
           }}
         >
-          {product.description}
-        </Text>
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: 12,
-        }}
-      >
-        <Text
+          <Text
+            style={{
+              fontSize: 32,
+              color: "#52CC6D",
+              marginLeft: 32,
+              fontWeight: "700",
+              textShadowColor: 'gray',
+              textShadowOffset: {width: -1, height: 1},
+              textShadowRadius: 5
+            }}
+          >
+            {
+              productSize.price
+            }
+          </Text>
+          <Text style={{ marginStart: 24 }}> đồng</Text>
+        </View>
+      }
+      {
+        isLoadingS==true ? <ActivityIndicator size="small" color="#00ff00" />
+        :
+        <View
           style={{
-            fontSize: 32,
-            color: "#52CC6D",
-            marginLeft: 32,
-            fontWeight: "700",
-            textShadowColor: 'gray',
-            textShadowOffset: {width: -1, height: 1},
-            textShadowRadius: 5
+            display: "flex",
+            flexDirection: "row",
+            marginVertical: 10,
+            marginStart: 15,
           }}
         >
           {
-            productSize.price
+          sizes.map((item) => (
+            <TouchableOpacity
+              key={item._id}
+              onPress={()=>{ getProductSize(id, item.size_symbol)}}
+              style={
+                styles.sizeBox
+              }
+            >
+              <Text style={{ color: "green" }}>{item.size_symbol}</Text>
+            </TouchableOpacity>
+          ))
           }
-        </Text>
-        <Text style={{ marginStart: 24 }}> đồng</Text>
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          marginVertical: 10,
-          marginStart: 15,
-        }}
-      >
-        {
-        sizes.map((item) => (
-          <TouchableOpacity
-            key={item._id}
-            onPress={()=>{ getProductSize(id, item.size_symbol)}}
-            style={
-              styles.sizeBox
-            }
-          >
-            <Text style={{ color: "green" }}>{item.size_symbol}</Text>
-          </TouchableOpacity>
-        ))
-        }
-      </View>
+        </View>
+      }
       <View>
         <TouchableOpacity
           onPress={()=>{

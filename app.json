@@ -5,7 +5,13 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.app_cafe"
+    },
+    "ios": {
+      "bundleIdentifier": "com.baoan3108.mobile-app"
+    }
   },
   "name": "mobile-app"
 }

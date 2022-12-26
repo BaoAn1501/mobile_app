@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   ToastAndroid,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { MaterialIcons } from '@expo/vector-icons';
@@ -23,7 +24,12 @@ export const Carts = (props) => {
   const { onGetCart, userID, onPlusCart, onMinusCart, onDeleteCart, onDeleteAllCart } =
     useContext(UserContext);
   const [carts, setCarts] = useState([]);
+  const [isLoadingCarts, setIsLoadingCarts] = useState(true);
   const [total, setTotal] = useState(0);
+  const [isLoadingBut, setIsLoadingBut] = useState(false);
+  const [isLoadingCheck, setIsLoadingCheck] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     // Use `setOptions` to update the button that we previously specified
     // Now the button includes an `onPress` handler to update the count
@@ -55,16 +61,29 @@ export const Carts = (props) => {
           );
         }, 0);
         setTotal(total);
+        setIsLoadingCarts(false);
       });
     })();
   }, [carts]);
 
   async function plus(cid) {
-    await onPlusCart(userID, cid);
+    setIsLoadingBut(true);
+    setIsLoading(true);
+    const res = await onPlusCart(userID, cid);
+    if(res){
+      setIsLoadingBut(false);
+      setIsLoading(false);
+    }
   }
 
   async function minus(cid) {
-    await onMinusCart(userID, cid);
+    setIsLoadingBut(true);
+    setIsLoading(true);
+    const res = await onMinusCart(userID, cid);
+    if(res){
+      setIsLoadingBut(false);
+      setIsLoading(false);
+    }
   }
 
   function convertIP(image) {
@@ -73,35 +92,40 @@ export const Carts = (props) => {
   }
 
   async function deleteItem(id){
+    setIsLoading(true);
     const res = await onDeleteCart(userID, id);
     if(res){
       if(res.message){
         ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+        setIsLoading(false);
       }
     }
   }
 
-  async function deleteAllItem(id){
+  async function deleteAllItem(){
+    setIsLoading(true);
     const res = await onDeleteAllCart(userID);
     if(res){
       if(res.message){
         ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+        setIsLoading(false);
       }
     }
   }
 
   function toCheckOut(){
-    console.log('checkout');
+    setIsLoadingCheck(true);
     if(carts.length==0){
       ToastAndroid.show('Không có sản phẩm nào trong giỏ hàng', ToastAndroid.BOTTOM);
+      setIsLoadingCheck(false);
     } else {
       ToastAndroid.show('Đến trang thanh toán', ToastAndroid.BOTTOM);
+      setIsLoadingCheck(false);
       navigation.navigate('CheckOut')
     }
   }
 
   const cartItem = ({ item }) => {
-    
     return (
       <View key={item._id} style={styles.itemContainer}>
         <View style={styles.leftPart}>
@@ -124,24 +148,28 @@ export const Carts = (props) => {
               </Text>
               <Text style={{marginTop: 10}}>{item.productSize_id.price} đ</Text>
             </View>
-            <View style={styles.rightDownPart}>
-              <TouchableOpacity
-              onPress={() => minus(item._id)}
-              style={[styles.actionContainer, styles.actionLeft]}
-              >
-              <Text style={styles.actionText}>-</Text>
-              </TouchableOpacity>
-              <View style={styles.quantityContainer}>
-                <Text style={styles.quantity}>{item.quantity}</Text>
+            {
+              isLoadingBut==true ? <ActivityIndicator size="small" color="#00ff00" />
+              :
+              <View style={styles.rightDownPart}>
+                <TouchableOpacity
+                onPress={() => minus(item._id)}
+                style={[styles.actionContainer, styles.actionLeft]}
+                >
+                <Text style={styles.actionText}>-</Text>
+                </TouchableOpacity>
+                <View style={styles.quantityContainer}>
+                  <Text style={styles.quantity}>{item.quantity}</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => plus(item._id)}
+                  style={[styles.actionContainer, styles.actionRight]}
+                >
+                  <Text style={styles.actionText}>+</Text>
+                </TouchableOpacity>
+                <MaterialIcons onPress={()=>deleteItem(item._id)} style={{marginLeft: 20}} name="highlight-remove" size={24} color="gray" />
               </View>
-              <TouchableOpacity
-                onPress={() => plus(item._id)}
-                style={[styles.actionContainer, styles.actionRight]}
-              >
-                <Text style={styles.actionText}>+</Text>
-              </TouchableOpacity>
-              <MaterialIcons onPress={()=>deleteItem(item._id)} style={{marginLeft: 20}} name="highlight-remove" size={24} color="gray" />
-            </View>
+            }
           </View>
         </View>
       </View>
@@ -150,17 +178,32 @@ export const Carts = (props) => {
 
   const renderFooter = () => {
     return (
-      <View style={styles.footer}>
-        
-        <View style={styles.leftFooter}>
-            <Text>Tổng tiền:</Text>
-            <Text style={styles.total}>{total} đ</Text>
-        </View>
-        <View style={styles.rightFooter}>
-          <Pressable style={styles.button} onPress={()=>toCheckOut()}>
-            <Text style={styles.buttonText}>Thanh toán</Text>
-          </Pressable>
-        </View>
+      <View>
+        {
+          carts.length>0 ?
+          <View style={styles.footer}>
+            <View style={styles.leftFooter}>
+                <Text>Tổng tiền:</Text>
+                <Text style={styles.total}>{total} đ</Text>
+            </View>
+            {
+              isLoading==true ? <ActivityIndicator size="small" color="#00ff00" />
+              :
+              <View style={styles.rightFooter}>
+                <Pressable style={styles.button} onPress={()=>toCheckOut()}>
+                  <Text style={styles.buttonText}>Thanh toán</Text>
+                </Pressable>
+            </View>
+            }
+          </View>
+          :
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Image style={{width: 200, height: 200}} source={{uri : 'https://www.anilexindia.com/uploads/no_product_found.png'}} />
+            <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+              <Text style={{textAlign: 'center', color: 'green'}}>Đến mua hàng ngay</Text>
+            </TouchableOpacity>
+          </View>
+        }
       </View>
     );
   };
@@ -168,23 +211,18 @@ export const Carts = (props) => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        {
-          carts.length > 0 ?
-          <FlatList
-            data={carts}
-            renderItem={cartItem}
-            keyExtractor={(item) => item._id}
-            ListFooterComponent={renderFooter}
-          />
-          : 
-          <View style={{height: windowHeight, alignItems: 'center', justifyContent: 'center'}}>
-            <Image style={{width: 80, height: 80, resizeMode: 'contain'}} source={{uri: 'https://cdn-icons-png.flaticon.com/512/1376/1376786.png'}} />
-            <Text>Chưa có sản phẩm nào trong giỏ hàng !</Text>
-            <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
-              <Text style={{color: 'green'}}>Đến mua hàng</Text>
-            </TouchableOpacity>
+          <View>
+            {
+              isLoadingCarts==true ? <ActivityIndicator size="large" color="#00ff00" />
+              :
+              <FlatList
+                data={carts}
+                renderItem={cartItem}
+                keyExtractor={(item) => item._id}
+                ListFooterComponent={renderFooter}
+              />
+            }
           </View>
-        }
       </View>
     </SafeAreaView>
   );

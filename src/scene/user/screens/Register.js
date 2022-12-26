@@ -2,21 +2,25 @@ import React, { useState, useContext, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import {
     StyleSheet, Text, View, Image, TextInput, Pressable,
-    KeyboardAvoidingView, ScrollView, ToastAndroid
+    KeyboardAvoidingView, ScrollView, ToastAndroid, ActivityIndicator
 } from 'react-native';
 import { UserContext } from '../UserContext';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 const SignUp = (props) => {
     const {navigation} = props;
     const { onRegister } = useContext(UserContext);
+
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    
     const [hidePass1, setHidePass1] = useState(true);
     const [hidePass2, setHidePass2] = useState(true);
     const [myIcon1, setMyIcon1] = useState('');
     const [myIcon2, setMyIcon2] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     
@@ -72,13 +76,17 @@ const SignUp = (props) => {
             ToastAndroid.show('Mật khẩu không trùng khớp', ToastAndroid.BOTTOM);
             return;
         }
+        setIsLoading(true);
         const res = await onRegister(fullName, email, password, confirmPassword);
         console.log('register result: ', res);
-        if(res.status==false){
-            ToastAndroid.show(res.message, ToastAndroid.BOTTOM); 
-        } else {
-            ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
-            navigation.goBack();
+        if(res){
+            if(res.status==false){
+                ToastAndroid.show(res.message, ToastAndroid.BOTTOM); 
+            } else {
+                ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+                navigation.goBack();
+            }
+            setIsLoading(false);
         }
     }
     return (
@@ -135,6 +143,11 @@ const SignUp = (props) => {
                         </Text>
                         <Text onPress={() => navigation.goBack()}
                             style={styles.textNew}> Đăng nhập</Text>
+                    </View>
+                    <View style={{marginTop: 20}}>
+                        {
+                            isLoading==true ? <ActivityIndicator size="large" color="#00ff00" /> : <></>
+                        }
                     </View>
                 </View>
             </View>
