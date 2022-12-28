@@ -30,7 +30,7 @@ const BodyRBSheet = forwardRef((props, ref) => {
       setAddresses(res);
     }
     GetAddresses();
-  }, []);
+  }, [address]);
   const ItemAddress = ({item}) => {
     return (
       <TouchableOpacity onPress={()=>{chooseAddress(item._id), ref.current.close()}}>
@@ -136,8 +136,10 @@ const CheckOut = (props) => {
     if(res){
       if(res.message){
         ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
+        if(res.status==true){
+          navigation.navigate('Home');
+        }
         setIsLoading(false);
-        navigation.navigate('Home');
       }
     }
   }
@@ -183,11 +185,12 @@ const CheckOut = (props) => {
   }
 
   const handleCheckOut = () => {
+    console.log("address: ", address);
     if(selected==0){
       ToastAndroid.show('Bạn chưa chọn phương thức thanh toán', ToastAndroid.BOTTOM);
     } else if(selected==2){
       ToastAndroid.show('Chức năng này hiện đang bảo trì', ToastAndroid.BOTTOM);
-    } else if(!address){
+    } else if(address.length==0){
       ToastAndroid.show('Bạn chưa có địa chỉ giao hàng', ToastAndroid.BOTTOM);
     } else {
       if(selected==1){

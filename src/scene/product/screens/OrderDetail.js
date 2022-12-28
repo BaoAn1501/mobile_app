@@ -79,7 +79,7 @@ const OrderDetail = (props) => {
   async function CancelOrder() {
     const res = await onCancelOrder(userID, order._id);
     if(res){
-      navigation.goBack();
+      navigation.navigate('Home');
     } else {
       ToastAndroid.show('Lỗi khi hủy đơn hàng', ToastAndroid.BOTTOM);
     }
@@ -88,7 +88,7 @@ const OrderDetail = (props) => {
   async function ReceiveOrder() {
     const res = await onReceiveOrder(userID, order._id);
     if(res){
-      navigation.goBack();
+      navigation.navigate('Home');
     } else {
       ToastAndroid.show('Không nhận được hàng', ToastAndroid.BOTTOM);
     }

@@ -170,8 +170,8 @@ const Home = (props) => {
           </View>
           <View style={styles.productsContainer}>
             {
-              isLoadingPro==true ? <ActivityIndicator size="large" color="#00ff00" />
-              :
+              // isLoadingPro==true ? <ActivityIndicator size="large" color="#00ff00" />
+              // :
               <FlatList
                 style={styles.productListContainer}
                 data={products} //mảng

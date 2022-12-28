@@ -4,7 +4,8 @@ export const constants = {
     // ip trang: 192.168.1.24s
     // ip goodluck_123: 192.168.1.10
     // ip 7ty5g 192.168.88.185
-    HOSTING: 'http://192.168.1.131:3000',
+    HOSTING: 'http://172.20.10.2:3000',
+    // HOSTING: 'https://app-server-cafe.herokuapp.com',
     TOKEN_KEY: 'TOKEN_KEY',
     API_LOGIN: '/login',
     API_REGISTER: '/register',
@@ -15,4 +16,5 @@ export const constants = {
     API_RESET: '/api/reset-password'
 }
 
-export const IP = '192.168.1.131';
+export const IP = '172.20.10.2';
+// export const IP = '172.16.122.115';
